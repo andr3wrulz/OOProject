@@ -47,8 +47,11 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\ButtonManager.cs" />
+     <Compile Include="Assets\Scripts\GameConfig.cs" />
      <Compile Include="Assets\Scripts\GameControl.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
+     <Compile Include="Assets\Scripts\Inventory.cs" />
+     <Compile Include="Assets\Scripts\Item.cs" />
      <Compile Include="Assets\Scripts\RoomManager.cs" />
      <None Include="Assets\Audio\emptyFileToPreserveDir.txt" />
      <None Include="Assets\Animations\emptyFileToPreserveDir.txt" />

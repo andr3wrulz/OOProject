@@ -49,4 +49,6 @@ public class PlayerData {
 	public float health;
 	public float experience;
 	public int level;
+	public int gold;
+	public Inventory inventory;
 }

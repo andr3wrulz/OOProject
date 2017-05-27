@@ -268,9 +268,9 @@ MonoBehaviour:
     height: 1286
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 36250000
+    m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 3cf2fffff0f3ffff9ef5ffff4cf7ffff42f9fffff8faffffdafbffff00000000
+    m_ExpandedIDs: dafbffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -555,18 +555,18 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Scenes
+    - Assets/Scripts
   m_ViewMode: 1
   m_StartGridSize: 53
   m_LastFolders:
-  - Assets/Scenes
+  - Assets/Scripts
   m_LastFoldersGridSize: 53
   m_LastProjectPath: D:\UnityProjects\RPGQuest
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 46250000
-    m_LastClickedID: 9542
+    m_SelectedIDs: f0240000
+    m_LastClickedID: 9456
     m_ExpandedIDs: 00000000b82400005025000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -626,18 +626,18 @@ MonoBehaviour:
     m_ExpandedInstanceIDs: c62300002c25000044250000e8250000322500000c2500004225000000000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: GameConfig
+      m_OriginalName: GameConfig
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 9850
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 9}
     m_CreateAssetUtility:
