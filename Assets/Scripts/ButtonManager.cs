@@ -5,37 +5,67 @@ using UnityEngine.SceneManagement;
 
 public class ButtonManager : MonoBehaviour {
 
-	public void newGameBtn(string newGameLevel)
+	public static ButtonManager buttonManager;
+
+	public int newGame;
+	public int loadGame;
+	public int townMenu;
+	public int dungeon;
+	public int store;
+	public int characterSheet;
+	public int mainMenu;
+
+	// Run when the level initally loads (ie. before Start())
+	void Awake () {
+		if (buttonManager == null) {// If we don't have a saved ButtonManager object, save this one
+			DontDestroyOnLoad (gameObject);
+			buttonManager = this;
+		} else if (buttonManager != this) {// If we have one, but this isn't it, destroy this one
+			Destroy (gameObject);
+		}
+	}
+
+	// ------------------ Main Menu ------------------
+
+	public void loadNewGameScene()
     {
-        SceneManager.LoadScene(newGameLevel);
+		SceneManager.LoadScene(newGame);
     }
 
-    public void saveGameBtn(string saveState)
+	public void loadLoadGameScene() 
     {
-        //add stuff
+		SceneManager.LoadScene(loadGame);
     }
 
-    public void loadGameBtn(int loadState) 
-    {
-        //add stuff
-    }
+	public void loadTownMenuScene() 
+	{
+		SceneManager.LoadScene(townMenu);
+	}
 
-    public void enterDungeonBtn(string dungeon) //input Player player as a parameter
+
+	// ------------------ Town Menu ------------------
+
+	public void saveGameBtn()
+	{
+		//add stuff
+	}
+
+    public void loadDungeonScene()
     {
         SceneManager.LoadScene(dungeon);
     }
 
-    public void enterStoreBtn(string store) //add param player.gold
+    public void loadStoreScene()
     {
         SceneManager.LoadScene(store);
     }
 
-    public void returnToMainMenuBtn(string menu)
+    public void loadMainMenuScene()
     {
-        SceneManager.LoadScene(menu);
+		SceneManager.LoadScene(mainMenu);
     }
 
-    public void characterBtn(string characterSheet)
+    public void loadCharacterSheetScene()
     {
         SceneManager.LoadScene(characterSheet);
     }
