@@ -26,7 +26,6 @@ public class ButtonManager : MonoBehaviour {
 	}
 
 	// ------------------ Main Menu ------------------
-
 	public void loadNewGameScene()
     {
 		SceneManager.LoadScene(newGame);
@@ -44,7 +43,6 @@ public class ButtonManager : MonoBehaviour {
 
 
 	// ------------------ Town Menu ------------------
-
 	public void saveGameBtn()
 	{
 		//add stuff

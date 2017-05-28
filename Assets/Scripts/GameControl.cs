@@ -23,7 +23,7 @@ public class GameControl : MonoBehaviour {
 	}
 		
 	// Throw the serialized PlayerData class into a file based on the save slot
-	public void SavePlayer () {
+	public void savePlayer () {
 		BinaryFormatter bf = new BinaryFormatter ();
 		FileStream file = File.Create(Application.persistentDataPath + "/playerSave" + saveSlot + ".banana");
 		bf.Serialize (file, playerData);
@@ -31,7 +31,7 @@ public class GameControl : MonoBehaviour {
 	}
 
 	// Pull PlayerData from the save slot based file
-	public void LoadPlayer () {
+	public void loadPlayer () {
 		if (File.Exists(Application.persistentDataPath + "/playerSave" + saveSlot + ".dat")) {
 			BinaryFormatter bf = new BinaryFormatter();
 			FileStream file = File.Open(Application.persistentDataPath + "/playerSave" + saveSlot + ".banana", FileMode.Open);
@@ -49,6 +49,7 @@ public class PlayerData {
 	public float health;
 	public float experience;
 	public int level;
+	public int lastMilestone;
 	public int gold;
 	public Inventory inventory;
 }
