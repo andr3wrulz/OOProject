@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
+[Serializable]
 public class Item {
 
 	public enum ItemType {Weapon = 0, Armor = 1};
@@ -35,6 +37,7 @@ public class Item {
 	}
 }
 
+[Serializable]
 public class Weapon : Item {
 
 	public enum WeaponType {Sword = 0, Dagger = 1, Bow = 2, Wand = 3};
@@ -80,6 +83,7 @@ public class Weapon : Item {
 	}
 }
 
+[Serializable]
 public class Armor : Item {
 
 	public enum ArmorType {Helm = 0, Chest = 1, Legs = 2, Gloves = 3, Boots = 4};

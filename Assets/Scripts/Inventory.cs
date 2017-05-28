@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+[Serializable]
 public class Inventory {
 	Item [] backpack;
 	Item [] storage;

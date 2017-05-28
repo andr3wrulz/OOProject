@@ -26,7 +26,7 @@ public class LoadingManager : MonoBehaviour {
 	}
 
 	bool setSlotText(int slot, Text label) {
-		if (File.Exists (Application.persistentDataPath + "/playerSave" + slot + ".dat")) {// If we find a save
+		if (File.Exists (Application.persistentDataPath + "/playerSave" + slot + ".banana")) {// If we find a save
 			BinaryFormatter bf = new BinaryFormatter ();
 			FileStream file = File.Open (Application.persistentDataPath + "/playerSave" + slot + ".banana", FileMode.Open);
 			PlayerData playerData = (PlayerData)bf.Deserialize (file);
@@ -36,6 +36,7 @@ public class LoadingManager : MonoBehaviour {
 			return true;
 		} else {// if we don't
 			label.text = "Save file not found!\nSelect this slot to start a new file.";
+			Debug.Log ("[LoadingManager] Couldn't find: " + Application.persistentDataPath + "/playerSave" + slot + ".banana");
 		}
 		return false;
 	}
@@ -56,7 +57,7 @@ public class LoadingManager : MonoBehaviour {
 	}
 
 	void updateCurrentSlotText () {
-		currentSlotText.text = "Current Selection: " + currentSelection;
+		currentSlotText.text = "Current Selection: Slot " + currentSelection;
 	}
 
 	public void continuePressed() {

@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class ButtonManager : MonoBehaviour {
 
-	public static ButtonManager buttonManager;
-
 	public int newGame;
 	public int loadGame;
 	public int townMenu;
@@ -14,16 +12,6 @@ public class ButtonManager : MonoBehaviour {
 	public int store;
 	public int characterSheet;
 	public int mainMenu;
-
-	// Run when the level initally loads (ie. before Start())
-	void Awake () {
-		if (buttonManager == null) {// If we don't have a saved ButtonManager object, save this one
-			DontDestroyOnLoad (gameObject);
-			buttonManager = this;
-		} else if (buttonManager != this) {// If we have one, but this isn't it, destroy this one
-			Destroy (gameObject);
-		}
-	}
 
 	// ------------------ Main Menu ------------------
 	public void loadNewGameScene()
