@@ -38,9 +38,17 @@ public class GameControl : MonoBehaviour {
 	// Throw the serialized PlayerData class into a file based on the save slot
 	public void savePlayer () {
 		BinaryFormatter bf = new BinaryFormatter ();
-		FileStream file = File.Create(Application.persistentDataPath + "/playerSave" + saveSlot + ".banana");
-		bf.Serialize (file, playerData);
-		file.Close ();
+		FileStream file;
+
+		// Try to open file and serialize playerData
+		try {
+			file = File.Create(Application.persistentDataPath + "/playerSave" + saveSlot + ".banana");
+			bf.Serialize (file, playerData);
+			file.Close ();
+		} catch (Exception e) {
+			Debug.LogError ("[GameControl] Failed to save file in slot: " + saveSlot);
+			Debug.LogError ("[GameControl] " + e);
+		}
 
 		Debug.Log ("[GameControl] Saved file: " + Application.persistentDataPath + "/playerSave" + saveSlot + ".banana");
 	}
@@ -49,9 +57,25 @@ public class GameControl : MonoBehaviour {
 	public void loadPlayer () {
 		if (File.Exists(Application.persistentDataPath + "/playerSave" + saveSlot + ".banana")) {
 			BinaryFormatter bf = new BinaryFormatter();
-			FileStream file = File.Open(Application.persistentDataPath + "/playerSave" + saveSlot + ".banana", FileMode.Open);
-			playerData = (PlayerData)bf.Deserialize(file);
-			file.Close();
+			FileStream file = null;
+
+			try {
+				file = File.Open(Application.persistentDataPath + "/playerSave" + saveSlot + ".banana", FileMode.Open);
+			} catch (Exception e) {
+				Debug.LogError ("[GameControl] Failed to open file in slot: " + saveSlot + " while trying to load!");
+				Debug.LogError ("[GameControl] " + e);
+			}
+
+			try {
+				playerData = (PlayerData)bf.Deserialize(file);
+			} catch (Exception e) {
+				Debug.LogError ("[GameControl] Failed to load data from save file in slot: " + saveSlot);
+				Debug.LogError ("[GameControl] " + e);
+			}
+
+			if (file != null)
+				file.Close();
+
 			Debug.Log ("[GameControl] Loaded file: " + Application.persistentDataPath + "/playerSave" + saveSlot + ".banana");
 		}
 	}
@@ -59,8 +83,8 @@ public class GameControl : MonoBehaviour {
 	// Initialize player file
 	public void createNewPlayer (string name, int [] stats) {
 		playerData.name = name;
-		playerData.health = 100;
 		playerData.stats = stats;
+		playerData.health = playerData.getMaxHealth ();
 		playerData.experience = 0;
 		playerData.level = 1;
 		playerData.lastMilestone = 1;
@@ -79,9 +103,47 @@ public class PlayerData {
 	public string name;
 	public float health;
 	public int[] stats;
-	public float experience;
+	public int experience;
 	public int level;
 	public int lastMilestone;
 	public int gold;
 	public Inventory inventory;
+
+	public int getMaxHealth () {
+		return 100 + stats [(int) GameControl.playerStats.Constitution] * GameConfig.hitpointsPerConstitutionPoint;
+	}
+
+	public void addGold (int amount) {
+		gold += amount;
+	}
+
+	public void refreshLevel () {
+		level = getLevelForExperience (experience);
+	}
+
+	public void addExperience (int amount) {
+		experience += amount;
+	}
+
+	public int getExperienceForNextLevel () {
+		int baseXp = 50;
+		int factor = 2;
+		return (int) (baseXp * (level) ^ factor);// We don't add 1 because our formula assumes 0 experience at level 1
+	}
+
+	public int getExperienceToNextLevel () {
+		int exp = getExperienceForNextLevel () - experience;// Next - current
+		if (exp < 0)
+			exp = 0;
+		return exp;
+	}
+
+	public int getLevelForExperience (int experience) {// May be off by one
+		int lvl = (int) (Mathf.Sqrt (experience) / 50);
+
+		if (lvl > GameConfig.maxLevel)
+			lvl = GameConfig.maxLevel;
+
+		return lvl;
+	}
 }

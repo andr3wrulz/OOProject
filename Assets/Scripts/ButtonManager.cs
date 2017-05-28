@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ButtonManager : MonoBehaviour {
 
@@ -33,7 +34,9 @@ public class ButtonManager : MonoBehaviour {
 	// ------------------ Town Menu ------------------
 	public void saveGameBtn()
 	{
-		//add stuff
+		GameControl.control.savePlayer ();
+		Text saveButtonText = (Text)(GameObject.Find ("SaveButton").GetComponentInChildren<Text>());
+		saveButtonText.text = "Character Saved";
 	}
 
     public void loadDungeonScene()

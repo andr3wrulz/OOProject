@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using UnityEngine.SceneManagement;
+using System;
 
 public class LoadingManager : MonoBehaviour {
 
@@ -28,11 +29,31 @@ public class LoadingManager : MonoBehaviour {
 	bool setSlotText(int slot, Text label) {
 		if (File.Exists (Application.persistentDataPath + "/playerSave" + slot + ".banana")) {// If we find a save
 			BinaryFormatter bf = new BinaryFormatter ();
-			FileStream file = File.Open (Application.persistentDataPath + "/playerSave" + slot + ".banana", FileMode.Open);
-			PlayerData playerData = (PlayerData)bf.Deserialize (file);
-			file.Close ();
+			FileStream file = null;
+			// Try to open file
+			try {
+				file = File.Open (Application.persistentDataPath + "/playerSave" + slot + ".banana", FileMode.Open);
+			} catch (Exception e) {
+				Debug.LogError ("[LoadingManager] Failed to open save file in slot: " + slot);
+				Debug.LogError ("[LoadingManager] " + e.ToString());
+				label.text = "Couldn't open save file!";
+				return false;
+			}
 
-			label.text = "Name:\t\t" + playerData.name + "\nLevel:\t\t" + playerData.level + "\nDungeon Progress:\t" + playerData.lastMilestone;
+			// Try and parse file
+			try {
+				PlayerData playerData = (PlayerData)bf.Deserialize (file);
+				label.text = "Name:\t\t" + playerData.name + "\nLevel:\t\t" + playerData.level + "\nDungeon Progress:\t" + playerData.lastMilestone;
+			} catch (Exception e) {
+				Debug.LogError ("[LoadingManager] Failed to parse save file in slot: " + slot);
+				Debug.LogError ("[LoadingManager] " + e.ToString());
+				label.text = "Couldn't open save file!";
+				return false;
+			}
+
+			if (file != null)
+				file.Close ();
+
 			return true;
 		} else {// if we don't
 			label.text = "Save file not found!\nSelect this slot to start a new file.";
