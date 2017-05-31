@@ -21,7 +21,7 @@ public class RoomManager : MonoBehaviour {
 	public int monColumns = 7; // Corresponds to the number of columns monsters can spawn within, room has 2 columns more to each side
 	public int monRows = 7; // Corresponds to the number of rows monsters can spawn within, room has 2 rows more to each side
 	public Count numEnemies = new Count (0, 3);
-	public GameObject[] exitSprites;
+	public GameObject exitSprite;
 	public GameObject[] floorSprites;
 	public GameObject[] enemySprites;
 	public GameObject wallSprite;
@@ -55,15 +55,15 @@ public class RoomManager : MonoBehaviour {
 				GameObject toInstantiate = floorSprites[Random.Range (0, floorSprites.Length)];
 
 				// Unsure how to specify that these lead to the correct rooms, still separating for future use
-				if (nDoor && (x == monColumns / 2) && y == monRows) { // North exit
-					toInstantiate = exitSprites[Random.Range (0, exitSprites.Length)];
-				} else if (sDoor && (x == monColumns / 2) && y == -1) { // South exit
-					toInstantiate = exitSprites[Random.Range (0, exitSprites.Length)];
-				} else if (wDoor && x == 0 && (y == monRows / 2)) { // West exit
-					toInstantiate = exitSprites[Random.Range (0, exitSprites.Length)];
-				} else if (eDoor && x == monColumns && (y == monRows / 2)) { // East exit
-					toInstantiate = exitSprites[Random.Range (0, exitSprites.Length)];
-				} else if(x==-1 || y==-1 || x==monColumns || y==monRows) // Outer edge but not an exit, thus a wall
+				if (nDoor && (x == monColumns / 2) && y == (monRows+2)) { // North exit
+					toInstantiate = exitSprite;
+				} else if (sDoor && (x == monColumns / 2) && y == -3) { // South exit
+					toInstantiate = exitSprite;
+				} else if (wDoor && x == -3 && (y == monRows / 2)) { // West exit
+					toInstantiate = exitSprite;
+				} else if (eDoor && x == (monColumns+2) && (y == monRows / 2)) { // East exit
+					toInstantiate = exitSprite;
+				} else if(x==-3 || y==-3 || x==(monColumns+2) || y==(monRows+2)) // Outer edge but not an exit, thus a wall
 					toInstantiate = wallSprite;
 
 				GameObject instance = Instantiate (toInstantiate, new Vector3 (x, y, 0f), Quaternion.identity) as GameObject;
@@ -100,7 +100,8 @@ public class RoomManager : MonoBehaviour {
 	{
 		BoardSetup(nDoor, sDoor, eDoor, wDoor);
 		InitializePositions();
-		spawnEnemyAtRandom (enemySprites, numEnemies.minimum, numEnemies.maximum);
+		/* Monster sprites not yet finished, cannot be implemented */
+		// spawnEnemyAtRandom (enemySprites, numEnemies.minimum, numEnemies.maximum);
 
 	}
 
