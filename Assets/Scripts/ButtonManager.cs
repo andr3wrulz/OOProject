@@ -13,12 +13,18 @@ public class ButtonManager : MonoBehaviour {
 	public int store;
 	public int characterSheet;
 	public int mainMenu;
+	public int credits;
 
 	// ------------------ Main Menu ------------------
 	public void loadNewGameScene()
     {
 		SceneManager.LoadScene(newGame);
     }
+
+	public void loadCreditsScene()
+	{
+		SceneManager.LoadScene (credits);
+	}
 
 	public void loadLoadGameScene() 
     {
@@ -41,6 +47,7 @@ public class ButtonManager : MonoBehaviour {
 
     public void loadDungeonScene()
     {
+		GameControl.control.inDungeon = true;// Change music
         SceneManager.LoadScene(dungeon);
     }
 

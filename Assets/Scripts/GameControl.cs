@@ -14,6 +14,7 @@ public class GameControl : MonoBehaviour {
 	public int saveSlot = 4;// Initialize to debug slot (we only intend to store 3 slots)
 	public PlayerData playerData;// Used to store and modifier player stats
 
+	public bool inDungeon = false;// This lets us control the music that is played
 
 	// These values are stored to enable us to dynamically create items
 	public Sprite swordIcon;
