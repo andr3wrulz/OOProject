@@ -26,6 +26,8 @@ public class GameControl : MonoBehaviour {
 	public Animation bowAnimation;
 	public Animation wandAnimation;
 
+	public IntVector2 startRoom;
+
 	// Run when the level initally loads (ie. before Start())
 	void Awake () {
 		if (control == null) {// If we don't have a saved GameControl object, save this one

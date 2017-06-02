@@ -14,6 +14,7 @@ public class RoomManager : MonoBehaviour{
 
 	Room [,] rooms;
 	Queue<IntVector2> roomGenerationQueue;
+	IntVector2 lastRoom;
 
 	public RoomManager () {
 		
@@ -36,13 +37,16 @@ public class RoomManager : MonoBehaviour{
 
 		// Set our start room flag
 		rooms[startRoom.x, startRoom.y].setStart(true);
+		GameControl.control.startRoom = startRoom;
+		// Set our end room flag
+		rooms[lastRoom.x, lastRoom.y].setEnd(true);
 
 		// Instantiate prefabs for each room
 		instantiateRooms();
 
 		// Print debug if we need to
-		if (GameConfig.debugMode)
-			printRoomDebugInfo ();
+		//if (GameConfig.debugMode)
+			//printRoomDebugInfo ();
 	}
 
 	private void generateRooms() {
@@ -51,49 +55,78 @@ public class RoomManager : MonoBehaviour{
 			// Pull coordinates out of queue
 			IntVector2 currentRoom = roomGenerationQueue.Dequeue ();
 
+			if (rooms[currentRoom.x, currentRoom.y] != null)
+				continue;
+
+			// We store each room until it gets overwritten by the next, the last value in lastRoom is our end
+			lastRoom = currentRoom;
+
 			// Populate our options and requirements
 			bool[] doorsRoomCanHave = findDoorsRoomCanHave (currentRoom);
 			bool[] doorsRoomMustHave = findDoorsRoomMustHave (currentRoom);
 
+			//Debug.Log ("Room: " + currentRoom.x + ", " + currentRoom.y);
+
 			// If this is the last room in queue, use all the doors we can
 			if (roomGenerationQueue.Count < 1) {
-				rooms [currentRoom.x, currentRoom.y] = new Room (doorsRoomCanHave);
+				//Debug.Log ("Only room in queue, use all 'can' doors");
+				rooms [currentRoom.x, currentRoom.y] = new Room (doorsCanAndMustHave(doorsRoomCanHave, doorsRoomMustHave));
 			} else if (roomGenerationQueue.Count > 1) {// Since we have several paths available, leave doors up to chance
+				//Debug.Log("More than one in queue, leaving it up to chance");
 				rooms [currentRoom.x, currentRoom.y] = new Room (maybeDoors(doorsRoomCanHave, doorsRoomMustHave));
-			} else {// Must have at least one door
-				// Determine door placement
-				bool [] possibleDoors = maybeDoors(doorsRoomCanHave, doorsRoomMustHave);
+			} else {// Only one more room in queue, try and make the path continue
+				//Debug.Log ("Only one more in queue, try to continue path");
 
-				// Iterate until we get at least one door
-				if (doorsRoomCanHave [(int)Room.Direction.North])
-					rooms [currentRoom.x, currentRoom.y] = new Room (true, possibleDoors [1], possibleDoors [2], possibleDoors [3]);
-				else if (doorsRoomCanHave [(int) Room.Direction.East])
-					rooms [currentRoom.x, currentRoom.y] = new Room (false, true, possibleDoors [2], possibleDoors [3]);
-				else if (doorsRoomCanHave [(int) Room.Direction.South])
-					rooms [currentRoom.x, currentRoom.y] = new Room (false, false, true, possibleDoors [3]);
-				else if (doorsRoomCanHave [(int) Room.Direction.West])
-					rooms [currentRoom.x, currentRoom.y] = new Room (false, false, false, true);
-				else // Fail?
-					rooms [currentRoom.x, currentRoom.y] = new Room (false, false, false, false);
+				int doorCount = 0;
+				for (int i = 0; i < doorsRoomMustHave.Length; i++)
+					if (doorsRoomMustHave[i])
+						doorCount++;
+
+				// If we have enough doors to continue the path from our must doors, use those plus random of can doors
+				if (doorCount >= 2){
+					rooms[currentRoom.x, currentRoom.y] = new Room(maybeDoors(doorsRoomCanHave, doorsRoomMustHave));
+				} else {// We have to pull from our can doors
+					// Until we have at least 2 doors, use our can list, then use chance
+					for (int i = 0; i < doorsRoomMustHave.Length; i++)
+						if (doorCount < 2 && doorsRoomCanHave[i]) {// If we still have less than two, and we can use the current one
+							doorCount++;
+							doorsRoomMustHave[i] = true;
+						} else if (doorCount >= 2 && doorsRoomCanHave[i]) {// If we have enough doors and we can use the current one, leave it to chance
+							doorCount++;
+							doorsRoomMustHave[i] = Random.value >= 0.5f;
+						}
+
+					// Create rooms with our adjusted list
+					rooms[currentRoom.x, currentRoom.y] = new Room(doorsRoomMustHave);
+				}
 			}
 
 			// Add any new possible paths to queue
-			if (rooms[currentRoom.x, currentRoom.y].getDoor(Room.Direction.North) && rooms[currentRoom.x, currentRoom.y - 1] == null)
-				roomGenerationQueue.Enqueue(new IntVector2 (currentRoom.x, currentRoom.y - 1));
-			else if (rooms[currentRoom.x, currentRoom.y].getDoor(Room.Direction.East) && rooms[currentRoom.x + 1, currentRoom.y] == null)
-				roomGenerationQueue.Enqueue(new IntVector2 (currentRoom.x + 1, currentRoom.y));
-			else if (rooms[currentRoom.x, currentRoom.y].getDoor(Room.Direction.South) && rooms[currentRoom.x, currentRoom.y + 1] == null)
-				roomGenerationQueue.Enqueue(new IntVector2 (currentRoom.x, currentRoom.y + 1));
-			else if (rooms[currentRoom.x, currentRoom.y].getDoor(Room.Direction.West) && rooms[currentRoom.x - 1, currentRoom.y] == null)
-				roomGenerationQueue.Enqueue(new IntVector2 (currentRoom.x - 1, currentRoom.y));
-
-			// If we are out of rooms to generate, this last room is our end
-			if (roomGenerationQueue.Count == 0)
-				rooms[currentRoom.x, currentRoom.y].setEnd(true);
+			// Add above room if it doesn't exist and we have a door leading there
+			if (rooms [currentRoom.x, currentRoom.y].getDoor (Room.Direction.North) && currentRoom.y + 1 <= GameConfig.roomsPerLevel - 1 && rooms [currentRoom.x, currentRoom.y + 1] == null) {
+				//Debug.Log ("Adding north " + (currentRoom.x) + ", " + (currentRoom.y+1) + " to queue");
+				roomGenerationQueue.Enqueue (new IntVector2 (currentRoom.x, currentRoom.y + 1));
+			}
+			// Add right room if it doesn't exist and we have a door leading there
+			if (rooms [currentRoom.x, currentRoom.y].getDoor (Room.Direction.East) && currentRoom.x + 1 <= GameConfig.roomsPerLevel - 1 && rooms [currentRoom.x + 1, currentRoom.y] == null) {
+				//Debug.Log ("Adding east " + (currentRoom.x+1) + ", " + (currentRoom.y) + " to queue");
+				roomGenerationQueue.Enqueue (new IntVector2 (currentRoom.x + 1, currentRoom.y));
+			}
+			// Add below room if it doesn't exist and we have a door leading there
+			if (rooms [currentRoom.x, currentRoom.y].getDoor (Room.Direction.South) && currentRoom.y - 1 >= 0 && rooms [currentRoom.x, currentRoom.y - 1] == null) {
+				//Debug.Log ("Adding south " + (currentRoom.x) + ", " + (currentRoom.y-1) + " to queue");
+				roomGenerationQueue.Enqueue (new IntVector2 (currentRoom.x, currentRoom.y - 1));
+			}
+			// Add left room if it doesn't exist and we have a door leading there
+			if (rooms [currentRoom.x, currentRoom.y].getDoor (Room.Direction.West) && currentRoom.x - 1 >= 0 && rooms [currentRoom.x - 1, currentRoom.y] == null) {
+				//Debug.Log ("Adding west " + (currentRoom.x-1) + ", " + (currentRoom.y) + " to queue");
+				roomGenerationQueue.Enqueue (new IntVector2 (currentRoom.x - 1, currentRoom.y));
+			}
 		}
 	}
 
 	private void printRoomDebugInfo () {
+		Debug.Log ("[Room Manager] Printing room debug info:");
 		for (int i = 0; i < GameConfig.roomsPerLevel; i++)
 			for (int j = 0; j < GameConfig.roomsPerLevel; j++)
 				if (rooms [i, j] == null)
@@ -116,24 +149,39 @@ public class RoomManager : MonoBehaviour{
 
 	// Determines whether or not to place a door
 	private bool maybeDoor(bool can, bool must) {
-		// Return true if we must, return true 50% if we can
-		return must || (can && Random.value >= 0.5f);
+		if (must)
+			return true;
+		if (can)
+			return Random.value >= 0.5f;
+		return false;
+	}
+
+	// Must is doors leading in and can is doors to empty cells, sometimes we want maximum doors
+	private bool [] doorsCanAndMustHave (bool [] can, bool [] must) {
+		bool[] doors = new bool[4];
+
+		for (int i = 0; i < doors.Length; i++)
+			doors [i] = must [i] || can [i];
+
+		return doors;
 	}
 
 	private bool [] findDoorsRoomCanHave (IntVector2 coords) {
 		bool[] doors = { true, true, true, true };// Assume we can have all initially
 
 		// Check x
-		if (coords.x == 0)// Left edge
+		if (coords.x == 0 || rooms[coords.x - 1, coords.y] != null)// Left edge
 			doors [(int) Room.Direction.West] = false;
-		else if (coords.x == GameConfig.roomsPerLevel - 1)// Right edge
+		if (coords.x == GameConfig.roomsPerLevel - 1 || rooms[coords.x + 1, coords.y] != null)// Right edge
 			doors [(int) Room.Direction.East] = false;
 
 		// Check y
-		if (coords.y == 0)// Top edge
+		if (coords.y == GameConfig.roomsPerLevel - 1 || rooms[coords.x, coords.y + 1] != null)// Top edge
 			doors [(int) Room.Direction.North] = false;
-		else if (coords.y == GameConfig.roomsPerLevel - 1)// Bottom edge
+		if (coords.y == 0 || rooms[coords.x, coords.y - 1] != null)// Bottom edge
 			doors [(int) Room.Direction.South] = false;
+
+
 
 		return doors;
 	}
@@ -143,15 +191,18 @@ public class RoomManager : MonoBehaviour{
 
 		// Check room to the left if it has east door
 		if (coords.x > 0 && rooms[coords.x - 1, coords.y] != null && rooms [coords.x - 1, coords.y].getDoor (Room.Direction.East))
-			doors [(int)Room.Direction.West] = true;
+			doors [(int)Room.Direction.West] = true;// this room must have a west door
+		
 		// Check room to the right if it has west door
 		if (coords.x < GameConfig.roomsPerLevel - 1 && rooms[coords.x + 1, coords.y] != null && rooms [coords.x + 1, coords.y].getDoor (Room.Direction.West))
-			doors [(int)Room.Direction.East] = true;
+			doors [(int)Room.Direction.East] = true;// this room must have an east door
+		
 		// Check room above if it has south door
-		if (coords.y > 0 && rooms[coords.x, coords.y - 1] != null && rooms [coords.x, coords.y - 1].getDoor (Room.Direction.South))
-			doors [(int)Room.Direction.North] = true;
+		if (coords.y < GameConfig.roomsPerLevel - 1 && rooms[coords.x, coords.y + 1] != null && rooms [coords.x, coords.y + 1].getDoor (Room.Direction.South))
+			doors [(int)Room.Direction.North] = true;// this room must have a north door
+		
 		// Check room below if it has north door
-		if (coords.y < GameConfig.roomsPerLevel - 1 && rooms[coords.x, coords.y + 1] != null && rooms [coords.x, coords.y + 1].getDoor (Room.Direction.North))
+		if (coords.y > 0 && rooms[coords.x, coords.y - 1] != null && rooms [coords.x, coords.y - 1].getDoor (Room.Direction.North))
 			doors [(int)Room.Direction.South] = true;
 
 		return doors;
@@ -182,8 +233,8 @@ public class RoomManager : MonoBehaviour{
 		// if we are looking at a doorway
 		if ( (offX == 0 && offY == center && rooms[x, y].getDoor(Room.Direction.West))// West doorway
 			|| (offX == GameConfig.tilesPerRoom - 1 && offY == center && rooms[x, y].getDoor(Room.Direction.East))// East doorway
-			|| (offX == center && offY == 0 && rooms[x, y].getDoor(Room.Direction.North))// North doorway
-			|| (offX == center && offY == GameConfig.tilesPerRoom - 1 && rooms[x, y].getDoor(Room.Direction.South)) )// South doorway
+			|| (offX == center && offY == GameConfig.tilesPerRoom - 1 && rooms[x, y].getDoor(Room.Direction.North))// North doorway
+			|| (offX == center && offY == 0 && rooms[x, y].getDoor(Room.Direction.South)) )// South doorway
 			return floors[Random.Range(0,floors.Length)];// Return random floorway
 
 		// If we are on a wall
@@ -240,6 +291,8 @@ class Room {
 		// Set our flags
 		this.isStartRoom = isStartRoom;
 		this.isEndRoom = isEndRoom;
+
+		//Debug.Log ("\t New Room: " + doors [0]  + " " + doors [1]  + " " + doors [2]  + " " + doors [3]);
 	}
 
 	public bool getDoor (Room.Direction direction) {
@@ -268,7 +321,7 @@ class Room {
 	}
 }
 
-class IntVector2 {
+public class IntVector2 {
 	public int x, y;
 
 	public IntVector2 (int x, int y) {

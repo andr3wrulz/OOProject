@@ -54,6 +54,7 @@
      <Compile Include="Assets\Scripts\LoadingManager.cs" />
      <Compile Include="Assets\Scripts\MusicPlayer.cs" />
      <Compile Include="Assets\Scripts\NewGameButtonManager.cs" />
+     <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\RoomManager.cs" />
      <Compile Include="Assets\Scripts\TownStats.cs" />
      <None Include="Assets\Audio\emptyFileToPreserveDir.txt" />
