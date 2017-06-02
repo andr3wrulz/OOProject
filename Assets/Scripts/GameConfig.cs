@@ -10,4 +10,9 @@ public class GameConfig {
 	public static int maxLevel = 40;
 	public static int hitpointsPerConstitutionPoint = 2;
 
+	public static int tilesPerRoom = 11;// Width and height of each room in tiles, odd so there is a middle
+	public static int roomsPerLevel = 5;// Width and height of each level in rooms
+	public static float minRoomDensityPerLevel = 0.6f;// 60% of the floor must be populated with rooms
+
+	public static bool debugMode = true;
 }
