@@ -6,6 +6,7 @@ public class Player : MonoBehaviour {
 
 	IntVector2 currentRoom;
 	public Camera mainCamera;
+    public Camera miniMapCamera;
 
 	// Use this for initialization
 	void Start () {
@@ -23,6 +24,8 @@ public class Player : MonoBehaviour {
 	void Update () {
 		mainCamera.transform.SetPositionAndRotation (new Vector3 (this.transform.position.x,
 			this.transform.position.y, mainCamera.transform.position.z), Quaternion.identity);
+        miniMapCamera.transform.SetPositionAndRotation(new Vector3(this.transform.position.x,
+            this.transform.position.y, miniMapCamera.transform.position.z), Quaternion.identity);
 
-	}
+    }
 }
