@@ -112,6 +112,10 @@ public class PlayerData {
 	public int gold;
 	public Inventory inventory;
 
+	public float getItemFind () {
+		return 0;
+	}
+
 	public int getMaxHealth () {
 		return 100 + stats [(int) GameControl.playerStats.Constitution] * GameConfig.hitpointsPerConstitutionPoint;
 	}

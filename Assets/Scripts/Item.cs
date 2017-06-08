@@ -12,12 +12,22 @@ public class Item {
 	string name;
 	Sprite icon;
 	int value;
+	int tier;
 
-	public Item(ItemType itemType, string name, Sprite icon, int value) {
+	public Item(ItemType itemType, string name, Sprite icon, int value, int tier) {
 		this.itemType = itemType;
 		this.name = name;
 		this.icon = icon;
 		this.value = value;
+		this.tier = tier;
+	}
+
+	public int getTier() {
+		return tier;
+	}
+
+	public void setTier (int newTier) {
+		tier = newTier;
 	}
 
 	public ItemType getItemType() {
@@ -43,27 +53,78 @@ public class Weapon : Item {
 	public enum WeaponType {Sword = 0, Dagger = 1, Bow = 2, Wand = 3};
 
 	WeaponType weaponType;
-	float baseDamage;
-	float critChance;
+	float minDamage;
+	float maxDamage;
 	float critMultiplier;
 	int range;// Number of squares
 	Animation attackAnimation;
 
-	public Weapon (WeaponType weaponType, float baseDamage, float critChance, float critMultiplier, int range, Animation attackAnimation, string name, Sprite icon, int value) : base (ItemType.Weapon, name, icon, value) {
+	public Weapon (WeaponType weaponType, int range, Animation attackAnimation, string name, Sprite icon, int tier) : base (ItemType.Weapon, name, icon, tier) {
 		this.weaponType = weaponType;
-		this.baseDamage = baseDamage;
-		this.critChance = critChance;
-		this.critMultiplier = critMultiplier;
-		this.range = range;
+		//this.range = range;// Range is only based on weapon type
 		this.attackAnimation = attackAnimation;
+		this.maxDamage = generateMaxDamage ();
+	}
+
+	private int getRange() {
+		return 1;
+	}
+
+	private float generateMaxDamage() {
+		switch(weaponType) {
+			case WeaponType.Sword:
+			return 7 + (4 * getTier());
+			case WeaponType.Dagger:
+			return 6 + (2 * getTier());
+			case WeaponType.Bow:
+			return 7 + (3 * getTier());
+			case WeaponType.Wand:
+			return 8 + (4 * getTier());
+		}
+	}
+
+	private void itemVaration () {
+
+		// Set minimum crit chance
+		critMultiplier = 1;
+
+		// Set minimum minimium
+		minDamage = 2;
+		// Add stats
+		switch (weaponType) {
+			case WeaponType.Dagger:
+			case WeaponType.Sword:
+				minDamage += GameControl.control.playerData.stats [GameControl.playerStats.Strength];
+				break;
+			case WeaponType.Bow:
+				minDamage += GameControl.control.playerData.stats [GameControl.playerStats.Dexterity];
+				break;
+			case WeaponType.Wand:
+				minDamage += GameControl.control.playerData.stats [GameControl.playerStats.Intelligence];
+				break;
+		}
+
+		int random = UnityEngine.Random.Range (0, 8);// [0-7]
+		if (random >=4) {
+			minDamage *= 1 + (UnityEngine.Random.value % GameControl.control.playerData.getItemFind ());
+		}
+
+		// Minimum max damage
+		maxDamage = minDamage;
+		if (random == 2 || random == 3 || random == 6 || random == 7) {
+			// Max change
+		}
+		if (random%2==1){
+			// Crit change
+		}
+
+	
+
+		// crit mult
 	}
 
 	public WeaponType getWeaponType() {
 		return weaponType;
-	}
-
-	public float getBaseDamage() {
-		return baseDamage;
 	}
 
 	public float getCritChance() {
