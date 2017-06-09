@@ -124,7 +124,7 @@ public class Weapon : Item {
 	}
 
 	public WeaponType getWeaponType() {
-		return weaponType;
+		//return weaponType;
 	}
 
 	public float getCritChance() {
@@ -138,7 +138,7 @@ public class Weapon : Item {
 	public int getRange() {
 		return range;
 	}
-
+    
 	public Animation getAttackAnimation() {
 		return attackAnimation;
 	}
