@@ -1,0 +1,134 @@
+Initialize engine version: 5.6.1f1 (2860b30f0b54)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: Microsoft Basic Render Driver (ID=0x8c)
+    Vendor:   Microsoft
+    VRAM:     4095 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\UnityProjects\RPGQuest\RPGQuest_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\UnityProjects\RPGQuest\RPGQuest_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\UnityProjects\RPGQuest\RPGQuest_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\UnityProjects\RPGQuest\RPGQuest_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\UnityProjects\RPGQuest\RPGQuest_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\UnityProjects\RPGQuest\RPGQuest_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\UnityProjects\RPGQuest\RPGQuest_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\UnityProjects\RPGQuest\RPGQuest_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: C:\UnityProjects\RPGQuest\RPGQuest_Data\Managed\UnityEngine.Analytics.dll (this message is harmless)
+Loading C:\UnityProjects\RPGQuest\RPGQuest_Data\Managed\UnityEngine.Analytics.dll into Unity Child Domain
+- Completed reload, in  0.524 seconds
+Platform assembly: C:\UnityProjects\RPGQuest\RPGQuest_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\UnityProjects\RPGQuest\RPGQuest_Data\Managed\System.dll (this message is harmless)
+desktop: 1024x768 64Hz; virtual: 1024x768 at 0,0
+<RI> Initializing input.
+XInput1_3.dll not found. Trying XInput9_1_0.dll instead...
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 1.666400 ms
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 6.823400 ms
+
+Unloading 8 unused Assets to reduce memory usage. Loaded Objects now: 286.
+Total: 0.277900 ms (FindLiveObjects: 0.030300 ms CreateObjectMapping: 0.020100 ms MarkObjects: 0.203900 ms  DeleteObjects: 0.021800 ms)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.438500 ms
+
+Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 305.
+Total: 0.317000 ms (FindLiveObjects: 0.031800 ms CreateObjectMapping: 0.028100 ms MarkObjects: 0.247500 ms  DeleteObjects: 0.007500 ms)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.757100 ms
+
+Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 344.
+Total: 0.325300 ms (FindLiveObjects: 0.029300 ms CreateObjectMapping: 0.019400 ms MarkObjects: 0.259300 ms  DeleteObjects: 0.015600 ms)
+
+[LoadingManager] Couldn't find: C:/Users/Andrew/AppData/LocalLow/RPGQuest/RPGQuest/playerSave1.banana
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+[LoadingManager] Couldn't find: C:/Users/Andrew/AppData/LocalLow/RPGQuest/RPGQuest/playerSave2.banana
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+[LoadingManager] Couldn't find: C:/Users/Andrew/AppData/LocalLow/RPGQuest/RPGQuest/playerSave3.banana
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.531100 ms
+
+Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 456.
+Total: 0.453900 ms (FindLiveObjects: 0.033800 ms CreateObjectMapping: 0.020000 ms MarkObjects: 0.390700 ms  DeleteObjects: 0.007500 ms)
+
+[GameControl] Saved file: C:/Users/Andrew/AppData/LocalLow/RPGQuest/RPGQuest/playerSave1.banana
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 1.212200 ms
+
+Unloading 13 unused Assets to reduce memory usage. Loaded Objects now: 336.
+Total: 0.318300 ms (FindLiveObjects: 0.029300 ms CreateObjectMapping: 0.019600 ms MarkObjects: 0.240100 ms  DeleteObjects: 0.027700 ms)
+
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.458500 ms
+
+Unloading 3 unused Assets to reduce memory usage. Loaded Objects now: 370.
+Total: 0.337200 ms (FindLiveObjects: 0.028300 ms CreateObjectMapping: 0.021000 ms MarkObjects: 0.268500 ms  DeleteObjects: 0.017700 ms)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.660100 ms
+
+Unloading 69 unused Assets to reduce memory usage. Loaded Objects now: 336.
+Total: 0.368800 ms (FindLiveObjects: 0.029300 ms CreateObjectMapping: 0.021200 ms MarkObjects: 0.269600 ms  DeleteObjects: 0.046700 ms)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.402700 ms
+
+Unloading 3 unused Assets to reduce memory usage. Loaded Objects now: 287.
+Total: 0.246000 ms (FindLiveObjects: 0.021900 ms CreateObjectMapping: 0.019300 ms MarkObjects: 0.186400 ms  DeleteObjects: 0.016500 ms)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.434400 ms
+
+Unloading 3 unused Assets to reduce memory usage. Loaded Objects now: 336.
+Total: 0.529900 ms (FindLiveObjects: 0.044400 ms CreateObjectMapping: 0.022800 ms MarkObjects: 0.428000 ms  DeleteObjects: 0.032500 ms)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.534500 ms
+
+Unloading 3 unused Assets to reduce memory usage. Loaded Objects now: 287.
+Total: 0.280700 ms (FindLiveObjects: 0.031300 ms CreateObjectMapping: 0.020100 ms MarkObjects: 0.209600 ms  DeleteObjects: 0.017500 ms)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.355700 ms
+
+Unloading 3 unused Assets to reduce memory usage. Loaded Objects now: 336.
+Total: 0.325400 ms (FindLiveObjects: 0.029500 ms CreateObjectMapping: 0.019700 ms MarkObjects: 0.258900 ms  DeleteObjects: 0.015600 ms)
+
+[GameControl] Saved file: C:/Users/Andrew/AppData/LocalLow/RPGQuest/RPGQuest/playerSave1.banana
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.410600 ms
+
+Unloading 3 unused Assets to reduce memory usage. Loaded Objects now: 287.
+Total: 0.261100 ms (FindLiveObjects: 0.026100 ms CreateObjectMapping: 0.019500 ms MarkObjects: 0.197100 ms  DeleteObjects: 0.016600 ms)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.341200 ms
+
+Unloading 3 unused Assets to reduce memory usage. Loaded Objects now: 336.
+Total: 0.366700 ms (FindLiveObjects: 0.037100 ms CreateObjectMapping: 0.020700 ms MarkObjects: 0.290900 ms  DeleteObjects: 0.016000 ms)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.453600 ms
+
+Unloading 5 unused Assets to reduce memory usage. Loaded Objects now: 10431.
+Total: 2.393700 ms (FindLiveObjects: 0.653900 ms CreateObjectMapping: 0.173400 ms MarkObjects: 1.533500 ms  DeleteObjects: 0.031100 ms)
+
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 1044 -> priority: 1 
+  Thread -> id: ae8 -> priority: 1 

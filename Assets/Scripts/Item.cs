@@ -11,14 +11,12 @@ public class Item {
 	ItemType itemType;
 	string name;
 	Sprite icon;
-	int value;
 	int tier;
 
-	public Item(ItemType itemType, string name, Sprite icon, int value, int tier) {
+	public Item(ItemType itemType, string name, Sprite icon, int tier) {
 		this.itemType = itemType;
 		this.name = name;
 		this.icon = icon;
-		this.value = value;
 		this.tier = tier;
 	}
 
@@ -43,7 +41,7 @@ public class Item {
 	}
 
 	public int getValue() {
-		return value;
+		return 1;
 	}
 }
 
@@ -59,76 +57,73 @@ public class Weapon : Item {
 	int range;// Number of squares
 	Animation attackAnimation;
 
-	public Weapon (WeaponType weaponType, int range, Animation attackAnimation, string name, Sprite icon, int tier) : base (ItemType.Weapon, name, icon, tier) {
+	public Weapon (WeaponType weaponType, Animation attackAnimation, string name, Sprite icon, int tier) : base (ItemType.Weapon, name, icon, tier) {
 		this.weaponType = weaponType;
-		//this.range = range;// Range is only based on weapon type
+		this.range = getRange();// Range is only based on weapon type
 		this.attackAnimation = attackAnimation;
-		this.maxDamage = generateMaxDamage ();
-	}
-
-	private int getRange() {
-		return 1;
+		itemVaration ();// Generates our min, max, and crit mult
 	}
 
 	private float generateMaxDamage() {
 		switch(weaponType) {
 			case WeaponType.Sword:
-			return 7 + (4 * getTier());
+				return 7 + (4 * getTier());
 			case WeaponType.Dagger:
-			return 6 + (2 * getTier());
+				return 6 + (2 * getTier());
 			case WeaponType.Bow:
-			return 7 + (3 * getTier());
+				return 7 + (3 * getTier());
 			case WeaponType.Wand:
-			return 8 + (4 * getTier());
+				return 8 + (4 * getTier());
+
 		}
+		return 0;
 	}
 
 	private void itemVaration () {
 
-		// Set minimum crit chance
+		// Set minimum crit multiplier
 		critMultiplier = 1;
-
-		// Set minimum minimium
+		// Set minimum damage minimium
 		minDamage = 2;
-		// Add stats
+		// Set minimum damage max
+		maxDamage = generateMaxDamage();
+
+		// Add stats that affect minimum damage
 		switch (weaponType) {
 			case WeaponType.Dagger:
 			case WeaponType.Sword:
-				minDamage += GameControl.control.playerData.stats [GameControl.playerStats.Strength];
+				minDamage += GameControl.control.playerData.stats [(int)GameControl.playerStats.Strength];
 				break;
 			case WeaponType.Bow:
-				minDamage += GameControl.control.playerData.stats [GameControl.playerStats.Dexterity];
+				minDamage += GameControl.control.playerData.stats [(int)GameControl.playerStats.Dexterity];
 				break;
 			case WeaponType.Wand:
-				minDamage += GameControl.control.playerData.stats [GameControl.playerStats.Intelligence];
+				minDamage += GameControl.control.playerData.stats [(int)GameControl.playerStats.Intelligence];
 				break;
 		}
 
+		// Generate our case (each enhancement is determined by the binary representation of random)
 		int random = UnityEngine.Random.Range (0, 8);// [0-7]
-		if (random >=4) {
+
+		if (random >=4) {// Enhance min damage
 			minDamage *= 1 + (UnityEngine.Random.value % GameControl.control.playerData.getItemFind ());
 		}
 
-		// Minimum max damage
-		maxDamage = minDamage;
-		if (random == 2 || random == 3 || random == 6 || random == 7) {
-			// Max change
-		}
-		if (random%2==1){
-			// Crit change
+		// if our min is larger than our max, that shouldn't happen
+		if (minDamage > maxDamage)
+			maxDamage = minDamage;
+		
+		if (random == 2 || random == 3 || random == 6 || random == 7) {// Enhance max damage
+			maxDamage *= 1 + (UnityEngine.Random.value % GameControl.control.playerData.getItemFind ());
 		}
 
-	
-
-		// crit mult
+		if (random%2==1){// Enhance crit chance
+			critMultiplier *= 1 + (UnityEngine.Random.value % (GameControl.control.playerData.getItemFind ()*2));
+		}
 	}
 
 	public WeaponType getWeaponType() {
-		//return weaponType;
-	}
-
-	public float getCritChance() {
-		return critChance;
+		return weaponType;
 	}
 
 	public float getCritMultiplier() {
@@ -136,7 +131,11 @@ public class Weapon : Item {
 	}
 
 	public int getRange() {
-		return range;
+		if (weaponType == WeaponType.Bow)
+			return GameConfig.bowRange;
+		if (weaponType == WeaponType.Wand)
+			return GameConfig.wandRange;
+		return 1;
 	}
     
 	public Animation getAttackAnimation() {

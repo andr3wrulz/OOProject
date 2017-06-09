@@ -15,4 +15,7 @@ public class GameConfig {
 	public static float minRoomDensityPerLevel = 0.6f;// 60% of the floor must be populated with rooms
 
 	public static bool debugMode = true;
+
+	public static int bowRange = 4;
+	public static int wandRange = 3;
 }
