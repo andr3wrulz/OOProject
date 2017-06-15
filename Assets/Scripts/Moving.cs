@@ -67,7 +67,8 @@ using System.Collections;
 				// Only alive enemies can move.  
 				if (gameObject.activeSelf)
 				{
-					StartCoroutine (MakeSmoothMove (targetPosition));
+					Vector2 newPosition = Vector2.MoveTowards (start, targetPosition, speed * Time.deltaTime);
+					Move (newPosition);
 				}
 				return true;
 				
@@ -83,24 +84,12 @@ using System.Collections;
 		//Move the object closer to the target position by the inverse time. 
 		// Repeat the process. 
 
-		protected IEnumerator MakeSmoothMove (Vector3 targetPosition)
+		protected void Move (Vector2 direction)
 		{
-		float remainingDistance = (targetPosition - transform.position).sqrMagnitude;
 			
-		while(remainingDistance > float.Epsilon)
-
-			{
+			rigidbd.MovePosition (direction);
 			
-				Vector3 newPostion = Vector3.MoveTowards(rigidbd.position, targetPosition, speed * Time.deltaTime);
-				
-				rigidbd.MovePosition (newPostion);
-				
-				remainingDistance = (transform.position - targetPosition).sqrMagnitude;
-				
-				yield return null;
-			}
 		}
-
 
 		
 		// Move the object by calling CanMove. 
