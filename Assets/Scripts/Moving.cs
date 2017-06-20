@@ -16,7 +16,7 @@ using System.Collections;
 			boxCollider = GetComponent <BoxCollider2D> ();
 		}
 		
-		protected bool IsObstacle (int x, int y, out RaycastHit2D hit)
+	protected bool IsObstacle (int x, int y, float range, out RaycastHit2D hitSword, out RaycastHit2D hitBow)
 		{
 		
 			Vector2 start = rgb.position;
@@ -27,11 +27,15 @@ using System.Collections;
 			
 			boxCollider.enabled = false; 
 
-			hit = Physics2D.Linecast (start, targetPosition, BlockingLayer);
+			// Use linecast for sword attack. 
+			hitSword = Physics2D.Linecast (start, targetPosition, BlockingLayer);
 
-			boxCollider.enabled = true; 
+			// use raycast for bow attack. 
+			hitBow = Physics2D.Raycast (start, new Vector2 (x, y) , range,  BlockingLayer); 
 
-			if (hit.collider == null)
+			boxCollider.enabled = true;
+
+			if (hitBow.collider == null && hitSword.collider == null)
 			{
 				return false;
 			}
