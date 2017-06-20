@@ -16,7 +16,9 @@ using System.Collections;
 			boxCollider = GetComponent <BoxCollider2D> ();
 		}
 		
-	protected bool IsObstacle (int x, int y, float range, out RaycastHit2D hitSword, out RaycastHit2D hitBow)
+		// check if player is either "touching" or moving toward an enemy within the range. 
+		
+		protected bool IsObstacle (int x, int y, float range, out RaycastHit2D hitSword, out RaycastHit2D hitBow)
 		{
 		
 			Vector2 start = rgb.position;
