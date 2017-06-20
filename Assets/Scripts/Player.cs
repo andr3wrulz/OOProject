@@ -2,15 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour {
-
+public class Player : MonoBehaviour
+{
+    /* Room settings for player */
 	IntVector2 currentRoom;
 	public Camera mainCamera;
     public Camera miniMapCamera;
+
+    /* On event settings */
     Animator animator;
+    int maxHP; //to be displayed so can't change
+    int currentHealth;
+    int tempHealth;
+    int attackPower;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
 		currentRoom = GameControl.control.startRoom;
 
 		// Set position to one square below center in the start room
@@ -20,12 +28,19 @@ public class Player : MonoBehaviour {
 			1),// ZPos
 			Quaternion.identity);// Rotation
 
-        /* Player attack animation */
+        /* Player Event settings */
+        // maxHp = 50 + DR(10*level, CON, 20)
+        // currentHealth = maxHP;
+        // tempHealth = maxHp;
+        // attackPower = ???;
+
+        // Player attack animation 
         animator = GetComponent<Animator>();
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 		mainCamera.transform.SetPositionAndRotation (new Vector3 (this.transform.position.x,
 			this.transform.position.y, mainCamera.transform.position.z), Quaternion.identity);
         miniMapCamera.transform.SetPositionAndRotation(new Vector3(this.transform.position.x,
@@ -45,14 +60,20 @@ public class Player : MonoBehaviour {
         {
             animator.SetTrigger("PlayerAttack");
             /*
-                Lower enemy health. 
+                Lower enemy health.
+                Enemy.health -= attackPower; 
             */
         }
     }
 
     void GetHit()
     {
-        // must be activated on enemy attacking within distance.
-        // animator.SetTrigger("PlayerHit");
+    /*  To be uncommented once enemy's are implemented.
+        if(currentHealth < tempHealth)
+        {
+            tempHealth = currentHealth;
+            animator.SetTrigger("PlayerHit");
+        }
+    */
     }
 }
