@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : Moving
 {
@@ -16,6 +17,10 @@ public class Player : Moving
     int tempHealth;
     int attackPower;
 
+	/* UI */
+	public Text floorNumber;
+	public Text health;
+	public Text experienceToNextLevel;
 
     // for testing
     int count;
@@ -29,6 +34,9 @@ public class Player : Moving
     // Use this for initialization
     void Start ()
     {
+		health.text = "Health: " + GameControl.control.playerData.health;
+		floorNumber.text = "Floor: " + GameControl.control.playerData.floor;
+		experienceToNextLevel.text = "Exp to next level: " + GameControl.control.playerData.getExperienceToNextLevel();
 		currentRoom = GameControl.control.startRoom;
 
 		// Set position to one square below center in the start room

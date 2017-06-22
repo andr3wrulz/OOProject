@@ -90,6 +90,7 @@ public class GameControl : MonoBehaviour {
 		playerData.health = playerData.getMaxHealth ();
 		playerData.experience = 0;
 		playerData.level = 1;
+		playerData.floor = 1;
 		playerData.lastMilestone = 1;
 		playerData.gold = 0;
 		//playerData.inventory.setWeapon(new Weapon (Weapon.WeaponType.Sword, 1, 1, 2, 1, 
@@ -110,6 +111,7 @@ public class PlayerData {
 	public int level;
 	public int lastMilestone;
 	public int gold;
+	public int floor;
 	public Inventory inventory;
 
 	public float getItemFind () {
@@ -119,7 +121,7 @@ public class PlayerData {
 	public int getMaxHealth () {
 		return 100 + stats [(int) GameControl.playerStats.Constitution] * GameConfig.hitpointsPerConstitutionPoint;
 	}
-
+		
 	public void addGold (int amount) {
 		gold += amount;
 	}
