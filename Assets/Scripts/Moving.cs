@@ -16,8 +16,8 @@ using System.Collections;
 			boxCollider = GetComponent <BoxCollider2D> ();
 		}
 		
-		// check if player is either "touching" or moving toward an enemy within the range. 
-		
+		// Check if the player is moving toward an enemy or touching it. 
+		// The range is based on the weapon player is using.  
 		protected bool IsObstacle (int x, int y, float range, out RaycastHit2D hitSword, out RaycastHit2D hitBow)
 		{
 		
@@ -45,10 +45,13 @@ using System.Collections;
 			return true;
 		}
 		
-
+		
+		//Move the player.
 		protected void ToMove (Vector2 direction)  
-		{
+		{	
+			// for debugging
 			Debug.Log ("ToMove was called ");
+			
 			rgb.MovePosition (direction);
 		}
 	}

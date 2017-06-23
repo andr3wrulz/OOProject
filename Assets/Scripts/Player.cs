@@ -17,11 +17,11 @@ public class Player : Moving
     int attackPower;
 
 
-    // for testing
-    int count;
+    // this is for debugging
+    private int count;
     //-----
 
-    int speed = 10;
+    public int speed = 10;
 
     // This is used for attacking  by bow. 
     float range = 4f;
@@ -83,16 +83,45 @@ public class Player : Moving
 
             RaycastHit2D hitSword;
             RaycastHit2D hitBow;
-
+			
+			// This line is used for testing. 
+			// This line is only seen in scene window.
+			
             Debug.DrawLine(start, end, Color.red);
 
-            if (IsObstacle(x, y, range, out hitSword, out hitBow))
-            {
-                Debug.Log("Encounter obstacle " + count++);
+			// Below is where attack and hit take place.
+			// Now player just stop whenever he is moving toward an enemy within a range
+			// or touching it. 
+			
+            if (IsObstacle (x, y, range, out hitSword, out hitBow)) {
 
-                Debug.Log(hitSword.transform);
-                Debug.Log(hitBow.transform);
-            }else
+				Enemy enemyByBow = hitBow.transform.GetComponent<Enemy>();
+				// Can attack by bow if the player is using bow
+				if (enemyByBow != null){ 
+					Debug.Log ("Attack 1");
+				}
+
+				Enemy enemyBySword = hitBow.transform.GetComponent<Enemy>();
+				// Attack by sword or bow
+				if (enemyBySword != null){ 
+					Debug.Log ("Attack 2");
+				}
+
+				// Detect wall only by raycast and still be a distance from wall
+				// so player can move until linecast indicate that player is touching wall.
+				
+				Enemy wallOrEnemy = hitBow.transform.GetComponent<Enemy>();
+
+				if (wallOrEnemy == null && hitSword.transform == null) {
+
+					// for debugging
+					Debug.Log ("I see wall");
+
+					// Not touch the wall or shrine yet, continue to move. 
+					ToMove (newPosition);
+				}
+
+			} else
             {
                 ToMove(newPosition);
             }
