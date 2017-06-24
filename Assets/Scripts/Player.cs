@@ -53,7 +53,7 @@ public class Player : Moving
         // attackPower = ???;
 
         // Player attack animation 
-        base.Start();
+        base.Awake();
         animator = GetComponent<Animator>();
     }
 	
@@ -101,7 +101,7 @@ public class Player : Moving
 			// Now player just stop whenever he is moving toward an enemy within a range
 			// or touching it. 
 			
-            if (IsObstacle (x, y, range, out hitSword, out hitBow)) {
+           if (IsObstacle (x, y, range, out hitSword, out hitBow)) {
 
 				Enemy enemyByBow = hitBow.transform.GetComponent<Enemy>();
 				// Can attack by bow if the player is using bow
@@ -110,14 +110,13 @@ public class Player : Moving
 				}
 
 				Enemy enemyBySword = hitBow.transform.GetComponent<Enemy>();
-				// Attack by sword or bow
+				// Attack by sword
 				if (enemyBySword != null){ 
 					Debug.Log ("Attack 2");
 				}
 
 				// Detect wall only by raycast and still be a distance from wall
 				// so player can move until linecast indicate that player is touching wall.
-				
 				Enemy wallOrEnemy = hitBow.transform.GetComponent<Enemy>();
 
 				if (wallOrEnemy == null && hitSword.transform == null) {
@@ -125,14 +124,17 @@ public class Player : Moving
 					// for debugging
 					Debug.Log ("I see wall");
 
-					// Not touch the wall or shrine yet, continue to move. 
+					// 
 					ToMove (newPosition);
 				}
 
-			} else
-            {
-                ToMove(newPosition);
-            }
+			} 
+			// if not, just move. 
+			else
+			{
+				Debug.Log (x + "," + y);
+				ToMove (newPosition);
+			}
         }
     }
 

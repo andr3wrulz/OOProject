@@ -10,7 +10,7 @@ using System.Collections;
 		
 		//------------------------
 		
-		protected virtual void Start ()
+		protected virtual void Awake ()
 		{
 			rgb = GetComponent <Rigidbody2D> ();
 			boxCollider = GetComponent <BoxCollider2D> ();
@@ -51,7 +51,7 @@ using System.Collections;
 		{	
 			// for debugging
 			Debug.Log ("ToMove was called ");
-			
+
 			rgb.MovePosition (direction);
 		}
 	}
