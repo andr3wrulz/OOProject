@@ -29,7 +29,7 @@ public class Player : Moving
     public int speed = 10;
 
     // This is used for attacking  by bow. 
-    float range = 4f;
+    float range = 2f;
 
     // Use this for initialization
     void Start ()
@@ -102,6 +102,8 @@ public class Player : Moving
 			// or touching it. 
 			
            if (IsObstacle (x, y, range, out hitSword, out hitBow)) {
+
+				Debug.Log ("Hit Something");
 
 				Enemy enemyByBow = hitBow.transform.GetComponent<Enemy>();
 				// Can attack by bow if the player is using bow
