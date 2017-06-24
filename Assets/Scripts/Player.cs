@@ -9,13 +9,10 @@ public class Player : Moving
 	IntVector2 currentRoom;
 	public Camera mainCamera;
     public Camera miniMapCamera;
+    public static Player player;
 
     /* On event settings */
     Animator animator;
-    int maxHP; //to be displayed so can't change
-    int currentHealth;
-    int tempHealth;
-    int attackPower;
 
 	/* UI */
 	public Text floorNumber;
@@ -46,12 +43,6 @@ public class Player : Moving
 			1),// ZPos
 			Quaternion.identity);// Rotation
 
-        /* Player Event settings */
-        // maxHp = 50 + DR(10*level, CON, 20)
-        // currentHealth = maxHP;
-        // tempHealth = maxHp;
-        // attackPower = ???;
-
         // Player attack animation 
         base.Awake();
         animator = GetComponent<Animator>();
@@ -69,7 +60,7 @@ public class Player : Moving
         Attack();
 
         // Is player being attacked?
-        GetHit();
+        // to be called by enemy GetHit();
 
         /* Player moving code */
         int x, y;
@@ -125,11 +116,9 @@ public class Player : Moving
 
 					// for debugging
 					Debug.Log ("I see wall");
-
-					// 
 					ToMove (newPosition);
 				}
-
+        
 			} 
 			// if not, just move. 
 			else
@@ -143,24 +132,20 @@ public class Player : Moving
     void Attack()
     {
         /* Player attack settings */
+        int attackPower = 0;
+        bool enemyPresent = false;
         if (Input.GetKeyDown(KeyCode.Space))
         {
             animator.SetTrigger("PlayerAttack");
-            /*
-                Lower enemy health.
-                Enemy.health -= attackPower; 
-            */
+            if(enemyPresent)
+            {
+                Enemy.enemy.resetHealth(attackPower);
+            }
         }
     }
 
-    void GetHit()
+    public void PlayerGetHit()
     {
-    /*  To be uncommented once enemy's are implemented.
-        if(currentHealth < tempHealth)
-        {
-            tempHealth = currentHealth;
-            animator.SetTrigger("PlayerHit");
-        }
-    */
+        animator.SetTrigger("PlayerHit");
     }
 }
