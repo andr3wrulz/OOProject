@@ -5,8 +5,7 @@ using UnityEngine.UI;
 
 public class Enemy : Moving
 {
-    public int health;
-    public int type;    //type of enemy, 1 slime, 2 skeleton, 3 boss
+    public int health;    //type of enemy, 1 slime, 2 skeleton, 3 boss
     public int attackPower;
     public int speed = 10;
 
@@ -17,7 +16,7 @@ public class Enemy : Moving
 
     public static Enemy enemy;  
 
-    public void setStats()
+    public Enemy(int type)
     {
         switch(type)
         {
@@ -48,7 +47,6 @@ public class Enemy : Moving
     // Use this for initialization
     void Start ()
     {
-        setStats();
         base.Awake();
     }
 	
@@ -64,24 +62,8 @@ public class Enemy : Moving
         /* Enemy moving */
         int x = 0, y = 0;
 
-        Input.GetButton(name);
-        //for now, the enemy will move opposite of what the player does.
-        switch (name)
-        {
-            case ("Up"):
-                y -= 1;
-                break;
-            case ("Down"):
-                y += 1;
-                break;
-            case ("Right"):
-                x -= 1;
-                break;
-            case ("Left"):
-                x += 1;
-                break;
-            default: break;
-        }
+
+        // need to set x and y
 
         Vector2 start = transform.position;
         Vector2 end = start + new Vector2(x, y);

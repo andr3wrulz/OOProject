@@ -13,7 +13,6 @@ public class Player : Moving
 
     /* On event settings */
     Animator animator;
-    private int count;
     public int speed = 10;
 
     // This is used for attacking  by bow. 

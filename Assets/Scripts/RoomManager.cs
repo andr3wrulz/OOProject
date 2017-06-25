@@ -10,14 +10,14 @@ public class RoomManager : MonoBehaviour{
 	public GameObject wall;
 	public GameObject stairs;
 	public GameObject shrine;
-	public List<Enemy> mobs;    // List of mobs to choose from
+	public GameObject [] mobs;    // Array of mobs to choose from
 
 	Room [,] rooms;
 	Queue<IntVector2> roomGenerationQueue;
 	IntVector2 lastRoom;
 
 	public RoomManager () {
-		
+	    	
 	}
 
 	public void Awake () {
@@ -35,6 +35,9 @@ public class RoomManager : MonoBehaviour{
 		// Generate our rooms
 		generateRooms ();
 
+        // Populate with enemies
+        //populate();
+
 		// Set our start room flag
 		rooms[startRoom.x, startRoom.y].setStart(true);
 		GameControl.control.startRoom = startRoom;
@@ -48,6 +51,18 @@ public class RoomManager : MonoBehaviour{
 		//if (GameConfig.debugMode)
 			//printRoomDebugInfo ();
 	}
+
+    private void populate()
+    {
+        /*
+        int enemiesperRoom = 0; // related to level and amount of rooms
+        
+        while(enemiesperRoom > 0)
+        {
+
+        }
+        */
+    }
 
 	private void generateRooms() {
 		// c# queues don't have an isEmpty and their count is O(1) anyways
@@ -249,9 +264,8 @@ public class RoomManager : MonoBehaviour{
 				return stairs;
 		}
 
-
-		// Else we're on the floor
-		return floors[Random.Range(0,floors.Length)];// Return random floorway
+        // Else we're on the floor
+        return floors[Random.Range(0,floors.Length)];// Return random floorway
 	}
 
 }
