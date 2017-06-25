@@ -13,20 +13,16 @@ public class Player : Moving
 
     /* On event settings */
     Animator animator;
-
-	/* UI */
-	public Text floorNumber;
-	public Text health;
-	public Text experienceToNextLevel;
-
-    // this is for debugging
     private int count;
-    //-----
-
     public int speed = 10;
 
     // This is used for attacking  by bow. 
     float range = 2f;
+
+    /* UI */
+    public Text floorNumber;
+	public Text health;
+	public Text experienceToNextLevel;
 
     // Use this for initialization
     void Start ()
@@ -58,9 +54,6 @@ public class Player : Moving
 
         // Is player attacking?
         Attack();
-
-        // Is player being attacked?
-        // to be called by enemy GetHit();
 
         /* Player moving code */
         int x, y;

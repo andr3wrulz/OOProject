@@ -10,7 +10,7 @@ public class RoomManager : MonoBehaviour{
 	public GameObject wall;
 	public GameObject stairs;
 	public GameObject shrine;
-	//public List<Mob> mobs;// List of mobs to choose from
+	public List<Enemy> mobs;    // List of mobs to choose from
 
 	Room [,] rooms;
 	Queue<IntVector2> roomGenerationQueue;

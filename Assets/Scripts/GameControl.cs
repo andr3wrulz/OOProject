@@ -118,6 +118,11 @@ public class PlayerData {
 		return 0;
 	}
 
+    public void resetHealth(int damage)
+    {
+        this.health -= damage;
+    }
+
 	public int getMaxHealth () {
 		return 100 + stats [(int) GameControl.playerStats.Constitution] * GameConfig.hitpointsPerConstitutionPoint;
 	}

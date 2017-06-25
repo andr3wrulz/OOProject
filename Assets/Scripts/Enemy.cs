@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Enemy : Moving
 {
     public int health;
-    public int type; //type of enemy, to be done in inspector
+    public int type;    //type of enemy, 1 slime, 2 skeleton, 3 boss
     public int attackPower;
     public int speed = 10;
 
@@ -58,12 +58,8 @@ public class Enemy : Moving
         /* Enemy dies */
         if(this.health <= 0)
         {
-            //dissapear
-            base.StopAllCoroutines(); //dunno if this works
+            Destroy(enemy);
         }
-
-        /* Attacking */
-        Attack();
 
         /* Enemy moving */
         int x = 0, y = 0;
@@ -111,6 +107,13 @@ public class Enemy : Moving
                 // for debugging
                 Debug.Log("I see wall");
                 ToMove(newPosition);
+
+                Player temp = hit.transform.GetComponent<Player>();
+
+                if (temp != null)  //attack when you see a player
+                {
+                    Attack();
+                }
             }
 
         }else
@@ -120,13 +123,9 @@ public class Enemy : Moving
         }
     }
     void Attack()
-    {
-        bool playerPresent = false;//default for now
-        if (playerPresent)
-        {
-            animator.SetTrigger("EnemyAttack");
-            Player.player.PlayerGetHit();
-            //lower player health
-        }
+    {    
+        animator.SetTrigger("EnemyAttack");
+        Player.player.PlayerGetHit();
+        GameControl.control.playerData.resetHealth(attackPower); 
     }
 }
