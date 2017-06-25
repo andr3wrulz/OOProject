@@ -56,7 +56,7 @@ public class Enemy : Moving
         /* Enemy dies */
         if(this.health <= 0)
         {
-            Destroy(enemy);
+           Destroy(this);
         }
 
         /* Enemy moving */

@@ -11,6 +11,7 @@ public class RoomManager : MonoBehaviour{
 	public GameObject stairs;
 	public GameObject shrine;
 	public GameObject [] mobs;    // Array of mobs to choose from
+    private List<Vector3> locations;    //valid locations for enemies
 
 	Room [,] rooms;
 	Queue<IntVector2> roomGenerationQueue;
@@ -35,9 +36,6 @@ public class RoomManager : MonoBehaviour{
 		// Generate our rooms
 		generateRooms ();
 
-        // Populate with enemies
-        //populate();
-
 		// Set our start room flag
 		rooms[startRoom.x, startRoom.y].setStart(true);
 		GameControl.control.startRoom = startRoom;
@@ -47,21 +45,31 @@ public class RoomManager : MonoBehaviour{
 		// Instantiate prefabs for each room
 		instantiateRooms();
 
-		// Print debug if we need to
-		//if (GameConfig.debugMode)
-			//printRoomDebugInfo ();
-	}
+        // Populate with enemies
+        //populateWithEnemies();
 
-    private void populate()
+        // Print debug if we need to
+        //if (GameConfig.debugMode)
+        //printRoomDebugInfo ();
+    }
+
+    private void populateWithEnemies()
     {
-        /*
-        int enemiesperRoom = 0; // related to level and amount of rooms
+        int enemiesperRoom = 20; // should be based off something
         
-        while(enemiesperRoom > 0)
+        while(enemiesperRoom > 0 && locations.Count != 0)
         {
+            Vector3 xyz;
+            int random = Random.Range(0, locations.Count);
+            xyz = locations[random];
+            locations.RemoveAt(random);
 
+            GameObject slime = mobs[Random.Range(0, mobs.Length)];
+
+            Instantiate(slime, xyz, Quaternion.identity);
+            enemiesperRoom--;
         }
-        */
+        
     }
 
 	private void generateRooms() {
@@ -264,6 +272,9 @@ public class RoomManager : MonoBehaviour{
 				return stairs;
 		}
 
+        // Possible locations for an enemy, not working
+        // locations.Add(new Vector3(x, y, 0));
+        
         // Else we're on the floor
         return floors[Random.Range(0,floors.Length)];// Return random floorway
 	}
