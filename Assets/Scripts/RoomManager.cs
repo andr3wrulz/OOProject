@@ -45,31 +45,9 @@ public class RoomManager : MonoBehaviour{
 		// Instantiate prefabs for each room
 		instantiateRooms();
 
-        // Populate with enemies
-        //populateWithEnemies();
-
         // Print debug if we need to
         //if (GameConfig.debugMode)
         //printRoomDebugInfo ();
-    }
-
-    private void populateWithEnemies()
-    {
-        int enemiesperRoom = 20; // should be based off something
-        
-        while(enemiesperRoom > 0 && locations.Count != 0)
-        {
-            Vector3 xyz;
-            int random = Random.Range(0, locations.Count);
-            xyz = locations[random];
-            locations.RemoveAt(random);
-
-            GameObject slime = mobs[Random.Range(0, mobs.Length)];
-
-            Instantiate(slime, xyz, Quaternion.identity);
-            enemiesperRoom--;
-        }
-        
     }
 
 	private void generateRooms() {
@@ -248,15 +226,25 @@ public class RoomManager : MonoBehaviour{
             {
                 GameObject tile = getObjectToInstatiate(i, j, x, y);
                 Instantiate(tile, new Vector3(roomOffset.x + i, roomOffset.y + j, 0f), Quaternion.identity, parent.transform);
-                if (Random.Range(1, 10) == 1 && (tile == floors[0] || tile == floors[1] || tile == floors[2] || tile == floors[3]))
+                if (tile == floors[0] || tile == floors[1] || tile == floors[2] || tile == floors[3])
                 {
-                    Instantiate(mobs[Random.Range(0, mobs.Length)], new Vector3(roomOffset.x + i, roomOffset.y + j, -1), Quaternion.identity);
+                    // Populate with enemies, loot, etc...
+                    populate(new Vector3(roomOffset.x + i, roomOffset.y + j, -1));
                 }
             }
     }
 
-	// Get the correct game object (wall, floor, shrine etc) 
-	private GameObject getObjectToInstatiate(int offX, int offY, int x, int y) {
+    private void populate(Vector3 position)
+    {
+        int probability = Random.Range(1, 20);
+        if (probability == 1)    //1/20th probability of having an enemy per tile
+        {
+            Instantiate(mobs[Random.Range(0, mobs.Length)], position, Quaternion.identity);
+        }//add probabilities of loot further on
+    }
+
+    // Get the correct game object (wall, floor, shrine etc) 
+    private GameObject getObjectToInstatiate(int offX, int offY, int x, int y) {
 		// Store instead of repeated computation
 		int center = GameConfig.tilesPerRoom / 2;
 
