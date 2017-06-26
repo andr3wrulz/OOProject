@@ -29,6 +29,7 @@ public class Player : Moving
 		health.text = "Health: " + GameControl.control.playerData.health;
 		floorNumber.text = "Floor: " + GameControl.control.playerData.floor;
 		experienceToNextLevel.text = "Exp to next level: " + GameControl.control.playerData.getExperienceToNextLevel();
+
 		currentRoom = GameControl.control.startRoom;
 
 		// Set position to one square below center in the start room

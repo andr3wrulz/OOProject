@@ -110,7 +110,7 @@ MonoBehaviour:
   m_MinSize: {x: 713, y: 495}
   m_MaxSize: {x: 18008, y: 14045}
   vertical: 0
-  controlID: 177
+  controlID: 12341
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -159,7 +159,7 @@ MonoBehaviour:
   m_MinSize: {x: 234, y: 495}
   m_MaxSize: {x: 10004, y: 14045}
   vertical: 1
-  controlID: 178
+  controlID: 12342
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -187,7 +187,7 @@ MonoBehaviour:
   - {fileID: 14}
   - {fileID: 15}
   m_Selected: 1
-  m_LastSelected: 0
+  m_LastSelected: 2
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -345,9 +345,9 @@ MonoBehaviour:
     height: 710
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 
-    m_LastClickedID: 0
-    m_ExpandedIDs: e4fbffff00000000
+    m_SelectedIDs: c6260000
+    m_LastClickedID: 9926
+    m_ExpandedIDs: da14feffa415feffc418feffe4fbffff00000000d6260000142700002c27000036270000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -492,22 +492,22 @@ MonoBehaviour:
   m_DepthBufferBits: 0
   m_Pos:
     serializedVersion: 2
-    x: 379
-    y: 101
-    width: 946
-    height: 564
+    x: 321
+    y: 92
+    width: 772
+    height: 371
   m_ViewPositions:
     m_KeySerializationHelper:
     - {fileID: 1107334752549795940, guid: 3f2b316b18192f74c9ca7a21b32dac38, type: 2}
     - {fileID: 1107868999341039188, guid: eeb7f0994adb90547a8578222a371c2c, type: 2}
     m_ValueSerializationHelper:
     - {x: 405.6, y: 243.40001}
-    - {x: 517.60004, y: 318.40002}
+    - {x: 413.2, y: 202.6}
   m_PreviewAnimator: {fileID: 0}
-  m_AnimatorController: {fileID: 9100000, guid: 3f2b316b18192f74c9ca7a21b32dac38,
+  m_AnimatorController: {fileID: 9100000, guid: eeb7f0994adb90547a8578222a371c2c,
     type: 2}
   m_BreadCrumbs:
-  - m_Target: {fileID: 1107334752549795940, guid: 3f2b316b18192f74c9ca7a21b32dac38,
+  - m_Target: {fileID: 1107868999341039188, guid: eeb7f0994adb90547a8578222a371c2c,
       type: 2}
     m_ScrollPosition: {x: 0, y: 0}
   stateMachineGraph: {fileID: 0}
@@ -558,19 +558,19 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Scripts
+    - Assets/Sprites
   m_ViewMode: 1
   m_StartGridSize: 53
   m_LastFolders:
-  - Assets/Scripts
+  - Assets/Sprites
   m_LastFoldersGridSize: 53
   m_LastProjectPath: C:\Users\nicol\Desktop\Processes of OO\OOProject
   m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 68}
-    m_SelectedIDs: 0e250000
-    m_LastClickedID: 9486
-    m_ExpandedIDs: 00000000d02400002c250000ae250000ba25000000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 87}
+    m_SelectedIDs: 88250000
+    m_LastClickedID: 9608
+    m_ExpandedIDs: 00000000cc24000028250000aa250000b625000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -598,7 +598,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000d02400002c250000ae250000ba25000000ca9a3bffffff7f
+    m_ExpandedIDs: 00000000cc24000028250000aa250000b625000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -626,7 +626,7 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 0
-    m_ExpandedInstanceIDs: c62300002c25000044250000e8250000322500000c250000422500006a26000084270000182500002225000028260000fe2500007c250000162600000000000056340000
+    m_ExpandedInstanceIDs: c62300002c25000044250000e8250000322500000c250000422500006a26000084270000182500002225000028260000fe2500007c2500001626000000000000563400004e250000f4250000fc240000562500008a260000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -650,7 +650,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 0}
+    m_ScrollPosition: {x: 0, y: 314}
     m_GridSize: 53
   m_DirectoriesAreaWidth: 177
 --- !u!114 &17
@@ -851,9 +851,9 @@ MonoBehaviour:
   m_DepthBufferBits: 0
   m_Pos:
     serializedVersion: 2
-    x: 1122
+    x: 1097
     y: 92
-    width: 414
+    width: 439
     height: 710
   m_InitialOpenURL: https://public-cdn.cloud.unity3d.com/editor/production/cloud/hub
   m_GlobalObjectTypeName: 

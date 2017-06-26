@@ -12,7 +12,7 @@ public class Enemy : Moving
     /* On event settings */
     Animator animator;
 
-    float range = 1f; //range only applied to long distance attacking foes
+    float range; //range only applied to long distance attacking foes
 
     public static Enemy enemy;  
 
@@ -23,18 +23,22 @@ public class Enemy : Moving
             case 1: //slime
                 health = (int)(.25 * GameControl.control.playerData.getMaxHealth());
                 attackPower = (int)(.25 * GameControl.control.playerData.floor * health);
+                range = 1;
                 break; 
             case 2: //skeleton
                 health = (int)(.35 * GameControl.control.playerData.getMaxHealth());
                 attackPower = (int)(.35 * GameControl.control.playerData.floor * health);
+                range = 0;
                 break; 
             case 3: //boss
                 health = (int)(.5 * GameControl.control.playerData.getMaxHealth());
                 attackPower = (int)(.5 * GameControl.control.playerData.floor * health);
+                range = 0;
                 break; 
             default:
                 health = (int)(1 * GameControl.control.playerData.getMaxHealth());
                 attackPower = (int)(1 * GameControl.control.playerData.floor * health);
+                range = 0;
                 break;
         }
     }
@@ -84,18 +88,18 @@ public class Enemy : Moving
             // so player can move until linecast indicate that player is touching wall.
             Enemy wallOrEnemy = longHit.transform.GetComponent<Enemy>(); //enemies shouldn't go through each other
 
+            Player temp = hit.transform.GetComponent<Player>();
+
+            if (temp != null)  //attack when you see a player
+            {
+                Attack();
+            }
+
             if (wallOrEnemy == null && hit.transform == null)
             {
                 // for debugging
                 Debug.Log("I see wall");
                 ToMove(newPosition);
-
-                Player temp = hit.transform.GetComponent<Player>();
-
-                if (temp != null)  //attack when you see a player
-                {
-                    Attack();
-                }
             }
 
         }else
@@ -106,7 +110,7 @@ public class Enemy : Moving
     }
     void Attack()
     {    
-        animator.SetTrigger("EnemyAttack");
+        animator.SetTrigger("enemyAttack");
         Player.player.PlayerGetHit();
         GameControl.control.playerData.resetHealth(attackPower); 
     }
