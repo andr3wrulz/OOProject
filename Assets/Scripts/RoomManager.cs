@@ -245,8 +245,15 @@ public class RoomManager : MonoBehaviour{
 
 		for (int i = 0; i < GameConfig.tilesPerRoom; i++)
 			for (int j = 0; j < GameConfig.tilesPerRoom; j++)
-				Instantiate (getObjectToInstatiate(i, j, x, y), new Vector3(roomOffset.x + i, roomOffset.y + j, 0f), Quaternion.identity, parent.transform);
-	}
+            {
+                GameObject tile = getObjectToInstatiate(i, j, x, y);
+                Instantiate(tile, new Vector3(roomOffset.x + i, roomOffset.y + j, 0f), Quaternion.identity, parent.transform);
+                if (Random.Range(1, 10) == 1 && (tile == floors[0] || tile == floors[1] || tile == floors[2] || tile == floors[3]))
+                {
+                    Instantiate(mobs[Random.Range(0, mobs.Length)], new Vector3(roomOffset.x + i, roomOffset.y + j, -1), Quaternion.identity);
+                }
+            }
+    }
 
 	// Get the correct game object (wall, floor, shrine etc) 
 	private GameObject getObjectToInstatiate(int offX, int offY, int x, int y) {
@@ -273,7 +280,7 @@ public class RoomManager : MonoBehaviour{
 		}
 
         // Possible locations for an enemy, not working
-        // locations.Add(new Vector3(x, y, 0));
+        // locations
         
         // Else we're on the floor
         return floors[Random.Range(0,floors.Length)];// Return random floorway
