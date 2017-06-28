@@ -30,8 +30,10 @@ using System.Collections;
 			boxCollider.enabled = false; 
 
 			// Use linecast for sword attack. 
-			hitSword = Physics2D.Linecast (start, targetPosition, BlockingLayer);
-
+			//hitSword = Physics2D.Linecast (start, targetPosition, BlockingLayer);
+			//This fixes the precious problem where player could not get close to walls. 
+			hitSword = Physics2D.Raycast (start, new Vector2 (x, y) , 0.4f,  BlockingLayer); 
+			
 			// use raycast for bow attack. 
 			hitBow = Physics2D.Raycast (start, new Vector2 (x, y) , range,  BlockingLayer); 
 
