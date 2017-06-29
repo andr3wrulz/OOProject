@@ -93,6 +93,7 @@ public class GameControl : MonoBehaviour {
 		playerData.floor = 1;
 		playerData.lastMilestone = 1;
 		playerData.gold = 0;
+		playerData.unspentPoints = 0;
 		//playerData.inventory.setWeapon(new Weapon (Weapon.WeaponType.Sword, 1, 1, 2, 1, 
 
 		// After we populate the data, go ahead and save it
@@ -113,6 +114,7 @@ public class PlayerData {
 	public int gold;
 	public int floor;
 	public Inventory inventory;
+	public int unspentPoints;
 
 	public float getItemFind () {
 		return 0;
@@ -142,7 +144,7 @@ public class PlayerData {
 	public int getExperienceForNextLevel () {
 		int baseXp = 50;
 		int factor = 2;
-		return (int) (baseXp * (level) ^ factor);// We don't add 1 because our formula assumes 0 experience at level 1
+		return (int) (baseXp * (level) ^ factor);// We don't add 1 because our formula assumes 0 experience at level 1, would normally be base*(level - 1)^factor
 	}
 
 	public int getExperienceToNextLevel () {
@@ -153,7 +155,7 @@ public class PlayerData {
 	}
 
 	public int getLevelForExperience (int experience) {// May be off by one
-		int lvl = (int) (Mathf.Sqrt (experience) / 50);
+		int lvl = (int) Math.Sqrt(experience / 50) + 1;
 
 		if (lvl > GameConfig.maxLevel)
 			lvl = GameConfig.maxLevel;

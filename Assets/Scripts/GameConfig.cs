@@ -8,6 +8,7 @@ public class GameConfig {
 	public static int storageSlots = 20;
 
 	public static int maxLevel = 40;
+	public static int pointsPerLevelUp = 3;
 	public static int hitpointsPerConstitutionPoint = 2;
 
 	public static int tilesPerRoom = 11;// Width and height of each room in tiles, odd so there is a middle
