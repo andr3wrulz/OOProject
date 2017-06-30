@@ -69,6 +69,10 @@ public class Inventory {
 		return removedArmor;
 	}
 
+	public Armor getArmorOfType(Armor.ArmorType armorType) {
+		return armor [(int)armorType];
+	}
+
 	// ------------------ Weapon Functions ------------------
 	public Weapon removeWeapon() {
 		return setWeapon (null);
@@ -78,5 +82,9 @@ public class Inventory {
 		Weapon removedWeapon = weapon;
 		weapon = newWeapon;
 		return removedWeapon;
+	}
+
+	public Weapon getWeapon() {
+		return weapon;
 	}
 }

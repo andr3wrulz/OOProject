@@ -115,6 +115,7 @@ public class PlayerData {
 	public int floor;
 	public Inventory inventory;
 	public int unspentPoints;
+	public Item[] shopInventory;
 
 	public float getItemFind () {
 		return 0;

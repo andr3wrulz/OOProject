@@ -122,6 +122,14 @@ public class Weapon : Item {
 		}
 	}
 
+	public float getMinDamage() {
+		return minDamage;
+	}
+
+	public float getMaxDamage() {
+		return maxDamage;
+	}
+
 	public WeaponType getWeaponType() {
 		return weaponType;
 	}

@@ -18,6 +18,7 @@ public class CharacterSheetScreen : MonoBehaviour {
 	public Sprite daggerIcon;
 	public Sprite bowIcon;
 	public Sprite wandIcon;
+	public Sprite bagIcon;
 
 	public Text unspentPointsLabel;
 	public Text levelUpMessage;
@@ -37,6 +38,7 @@ public class CharacterSheetScreen : MonoBehaviour {
 	int luck;
 
 	GameObject [] inventorySlots;// Holds ui objects
+	GameObject equippedWeaponSlot;
 
 	public void Start () {
 		// Set character sheet at current tab
@@ -79,14 +81,96 @@ public class CharacterSheetScreen : MonoBehaviour {
 			inventorySlots[i].transform.Find("SellButton").GetComponent<Button>().onClick.AddListener(() => sellButtonClicked (index));
 			inventorySlots [i].transform.Find ("EquipButton").GetComponent<Button> ().onClick.AddListener (() => equipButtonClicked (index));
 		}
+
+		equippedWeaponSlot = inventoryParent.transform.Find ("Current Weapon").gameObject;
 	}
 
 	void updateInventorySlots() {
+		// Update equipped weapon
+		Weapon equipped = GameControl.control.playerData.inventory.getWeapon();
+		if (equipped != null) {
+			equippedWeaponSlot.transform.Find ("Name").GetComponent<Text> ().text = equipped.getName ();
+			equippedWeaponSlot.transform.Find ("Value").GetComponent<Text> ().text = equipped.getValue ().ToString();
+			equippedWeaponSlot.transform.Find ("Details1").GetComponent<Text> ().text = "Damage: " + equipped.getMinDamage () + "-" + equipped.getMaxDamage ();
+			equippedWeaponSlot.transform.Find ("Name").GetComponent<Text> ().text = "Crit Multiplier: " + equipped.getCritMultiplier () + "x";
+			equippedWeaponSlot.transform.Find ("Name").GetComponent<Text> ().text = "Range: " + equipped.getRange () + " squares";
+		} else {
+			equippedWeaponSlot.transform.Find ("Name").GetComponent<Text> ().text = "Empty";
+			equippedWeaponSlot.transform.Find ("Value").GetComponent<Text> ().text = "Value: 0 gold";
+			equippedWeaponSlot.transform.Find ("Details1").GetComponent<Text> ().text = "";
+			equippedWeaponSlot.transform.Find ("Details2").GetComponent<Text> ().text = "";
+			equippedWeaponSlot.transform.Find ("Details3").GetComponent<Text> ().text = "";
+		}
+
+		// Update inventory
 		for (int i = 0; i < GameConfig.backpackSlots; i++) {
 			Item item = GameControl.control.playerData.inventory.getItemFromBackpackAtIndex (i);
-			inventorySlots [i].transform.Find ("Name").GetComponent<Text>().text = item.getName();
-			inventorySlots [i].transform.Find ("Value").GetComponent<Text> ().text = item.getValue ().ToString();
+			// If there is an item in that slot
+			if (item != null) {
+				inventorySlots [i].transform.Find ("Name").GetComponent<Text> ().text = item.getName ();
+				inventorySlots [i].transform.Find ("Value").GetComponent<Text> ().text = item.getValue ().ToString ();
+
+				// Determine type to fill out details and icon
+				if (item is Weapon) {
+					// Cast it
+					Weapon wep = item as Weapon;
+					inventorySlots [i].transform.Find ("Details1").GetComponent<Text> ().text = "Damage: " + wep.getMinDamage () + "-" + wep.getMaxDamage ();
+					inventorySlots [i].transform.Find ("Details2").GetComponent<Text> ().text = "Crit Multiplier: " + wep.getCritMultiplier () + "x";
+					inventorySlots [i].transform.Find ("Details3").GetComponent<Text> ().text = "Range: " + wep.getRange () + " squares";
+
+					switch (wep.getWeaponType ()) {
+						case Weapon.WeaponType.Sword:
+							inventorySlots [i].transform.Find ("Icon").GetComponent<SpriteRenderer> ().sprite = swordIcon;
+							break;
+						case Weapon.WeaponType.Dagger:
+							inventorySlots [i].transform.Find ("Icon").GetComponent<SpriteRenderer> ().sprite = daggerIcon;
+							break;
+						case Weapon.WeaponType.Bow:
+							inventorySlots [i].transform.Find ("Icon").GetComponent<SpriteRenderer> ().sprite = bowIcon;
+							break;
+						case Weapon.WeaponType.Wand:
+							inventorySlots [i].transform.Find ("Icon").GetComponent<SpriteRenderer> ().sprite = wandIcon;
+							break;
+					}
+				} else {// Is not a weapon
+					inventorySlots [i].transform.Find ("Details1").GetComponent<Text> ().text = "";
+					inventorySlots [i].transform.Find ("Details2").GetComponent<Text> ().text = "";
+					inventorySlots [i].transform.Find ("Details3").GetComponent<Text> ().text = "";
+				}
+			} else {// if that slot is empty
+				inventorySlots [i].transform.Find ("Name").GetComponent<Text> ().text = "Empty";
+				inventorySlots [i].transform.Find ("Value").GetComponent<Text> ().text = "Value: 0 gold";
+				inventorySlots [i].transform.Find ("Details1").GetComponent<Text> ().text = "";
+				inventorySlots [i].transform.Find ("Details2").GetComponent<Text> ().text = "";
+				inventorySlots [i].transform.Find ("Details3").GetComponent<Text> ().text = "";
+			}
 		}
+	}
+
+	Sprite getIconForItem (Item i) {
+		// If the slot is empty
+		if (i == null)
+			return bagIcon;
+
+		// If the item is a weapon
+		if (i is Weapon) {
+			switch ((i as Weapon).getWeaponType ()) {
+				case Weapon.WeaponType.Sword:
+					return swordIcon;
+					break;
+				case Weapon.WeaponType.Dagger:
+					return daggerIcon;
+					break;
+				case Weapon.WeaponType.Bow:
+					return bowIcon;
+					break;
+				case Weapon.WeaponType.Wand:
+					return wandIcon;
+					break;
+			}
+		}
+
+		return bagIcon;
 	}
 
 	void getInitialStats() {
@@ -104,10 +188,41 @@ public class CharacterSheetScreen : MonoBehaviour {
 
 	public void sellButtonClicked (int buttonId) {
 		Debug.Log ("Sell button " + buttonId + " clicked!");
+
+		Item item = GameControl.control.playerData.inventory.removeItemFromBackpackAtIndex (buttonId - 1);
+
+		// Check if slot wasn't empty
+		if (item == null) {
+			Debug.Log ("[DEBUG] Can't sell an item from an empty slot!");
+			return;
+		}
+
+		// Add the gold to the players inventory
+		GameControl.control.playerData.addGold(item.getValue());
+
+		// We already removed the item from the inventory so now we just need to update the labels
+		updateInventorySlots();
 	}
 
 	public void equipButtonClicked (int buttonId) {
 		Debug.Log ("Equip button " + buttonId + " clicked!");
+
+		// Take item from inventory
+		Weapon temp = GameControl.control.playerData.inventory.removeItemFromBackpackAtIndex (buttonId - 1) as Weapon;
+
+		// Make sure that slot wasn't empty
+		if (temp == null) {
+			Debug.Log ("[DEBUG] Can't equip an item from an empty slot!");
+			return;
+		}
+
+		// Unequip current weapon and put it in the inventory
+		GameControl.control.playerData.inventory.addItemToBackpackAtIndex(GameControl.control.playerData.inventory.removeWeapon (), buttonId - 1);
+		// Equip new weapon
+		GameControl.control.playerData.inventory.setWeapon(temp);
+
+		// Update inventory slot labels
+		updateInventorySlots();
 	}
 
 	public void clickInventoryTab () {
