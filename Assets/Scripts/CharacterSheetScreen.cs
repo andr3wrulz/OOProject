@@ -12,14 +12,12 @@ public class CharacterSheetScreen : MonoBehaviour {
 	public Button inventoryTabButton;
 
 	public GameObject characterSheetParent;
-	GameObject inventoryParent;
-	public GameObject canvas;
+	public GameObject inventoryParent;
 
-	public GameObject inventorySlotPrefab;
-	public GameObject swordIcon;
-	public GameObject daggerIcon;
-	public GameObject bowIcon;
-	public GameObject wandIcon;
+	public Sprite swordIcon;
+	public Sprite daggerIcon;
+	public Sprite bowIcon;
+	public Sprite wandIcon;
 
 	public Text unspentPointsLabel;
 	public Text levelUpMessage;
@@ -41,17 +39,9 @@ public class CharacterSheetScreen : MonoBehaviour {
 	GameObject [] inventorySlots;// Holds ui objects
 
 	public void Start () {
-		// Create our parent object
-		inventoryParent = new GameObject ("InventoryTabParent");
-		inventoryParent.transform.SetParent (canvas.transform);
-
 		// Set character sheet at current tab
 		currentScreen = MenuType.Character;
 		inventoryParent.SetActive (false);
-
-		// Instantiate ui elements
-		inventorySlots = new GameObject[GameConfig.backpackSlots];
-		createInventorySlots();
 
 		// If the player has leveled up, show the label and add the points
 		if (GameControl.control.playerData.getExperienceToNextLevel () <= 0) {
@@ -71,58 +61,53 @@ public class CharacterSheetScreen : MonoBehaviour {
 		// Pull current stats as starting point
 		getInitialStats();
 		updateCharacterSheetLabels ();
+
+		// Find inventory slot objects
+		findInventorySlots();
+		// Update inventory slots to match inventory
+		updateInventorySlots();
 	}
 
-	void getInitialStats() {
-		pointsRemaining = GameControl.control.playerData.unspentPoints;
-		strength = GameControl.control.playerData.stats [(int) GameControl.playerStats.Strength];
-		dexterity = GameControl.control.playerData.stats [(int) GameControl.playerStats.Dexterity];
-		constitution = GameControl.control.playerData.stats [(int) GameControl.playerStats.Constitution];
-		intelligence = GameControl.control.playerData.stats [(int) GameControl.playerStats.Intelligence];
-		charisma = GameControl.control.playerData.stats [(int) GameControl.playerStats.Charisma];
-		luck = GameControl.control.playerData.stats [(int) GameControl.playerStats.Luck];
-	}
+	void findInventorySlots() {
+		inventorySlots = new GameObject[10];
 
-	public void createInventorySlots () {
-		// Find correct y offsets
-		int centerHeight = Screen.height / 2;
-		int[] heights = { centerHeight + 220, centerHeight + 110, centerHeight, centerHeight - 110, centerHeight - 220 };
+		for (int i = 0; i < GameConfig.backpackSlots; i++) {
+			inventorySlots [i] = inventoryParent.transform.Find ("Slot " + (i+1)).gameObject;
 
-		for (int i = 0; i < 5; i++)
-			inventorySlots [i] = createInventorySlot (100, heights[i]);
-		for (int i = 5; i < 10; i++)
-			inventorySlots [i] = createInventorySlot (420, heights[i-5]);
-
-	}
-
-	void setupInventoryButtonListeners () {
-		// For each button
-		for (int i = 0; i < 10; i++) {
-			// We can't just pass i to each function becuase c# wont store the state of i when we set the listener
-			// So we need to create a new instance of each i to pass to the functions
-			int numberReference = i;
-
-			Button sellButton = inventorySlots [i].transform.Find("SellButton").GetComponent<Button>();
-			sellButton.onClick.AddListener (() => sellButtonClicked (numberReference));
-
-			Button equipButton = inventorySlots [i].transform.Find("EquipButton").GetComponent<Button>();
-			equipButton.onClick.AddListener (() => equipButtonClicked (numberReference));
+			// Setup listeners
+			int index = i + 1;// We must create a new reference to pass to the listener
+			inventorySlots[i].transform.Find("SellButton").GetComponent<Button>().onClick.AddListener(() => sellButtonClicked (index));
+			inventorySlots [i].transform.Find ("EquipButton").GetComponent<Button> ().onClick.AddListener (() => equipButtonClicked (index));
 		}
 	}
 
-	void sellButtonClicked (int buttonId) {
+	void updateInventorySlots() {
+		for (int i = 0; i < GameConfig.backpackSlots; i++) {
+			Item item = GameControl.control.playerData.inventory.getItemFromBackpackAtIndex (i);
+			inventorySlots [i].transform.Find ("Name").GetComponent<Text>().text = item.getName();
+			inventorySlots [i].transform.Find ("Value").GetComponent<Text> ().text = item.getValue ().ToString();
+		}
+	}
+
+	void getInitialStats() {
+		// Only if player stats are initialized
+		if (GameControl.control.playerData.stats.Length != 0) {
+			pointsRemaining = GameControl.control.playerData.unspentPoints;
+			strength = GameControl.control.playerData.stats [(int)GameControl.playerStats.Strength];
+			dexterity = GameControl.control.playerData.stats [(int)GameControl.playerStats.Dexterity];
+			constitution = GameControl.control.playerData.stats [(int)GameControl.playerStats.Constitution];
+			intelligence = GameControl.control.playerData.stats [(int)GameControl.playerStats.Intelligence];
+			charisma = GameControl.control.playerData.stats [(int)GameControl.playerStats.Charisma];
+			luck = GameControl.control.playerData.stats [(int)GameControl.playerStats.Luck];
+		}
+	}
+
+	public void sellButtonClicked (int buttonId) {
 		Debug.Log ("Sell button " + buttonId + " clicked!");
 	}
 
-	void equipButtonClicked (int buttonId) {
+	public void equipButtonClicked (int buttonId) {
 		Debug.Log ("Equip button " + buttonId + " clicked!");
-	}
-
-	GameObject createInventorySlot (float x, float y) {
-		GameObject slot = Instantiate (inventorySlotPrefab);
-		slot.transform.SetParent (inventoryParent.transform);
-		slot.transform.SetPositionAndRotation (new Vector3 (x, y, 1), Quaternion.identity);
-		return slot;
 	}
 
 	public void clickInventoryTab () {
@@ -152,13 +137,16 @@ public class CharacterSheetScreen : MonoBehaviour {
 	}
 
 	void updateCharacterSheetLabels() {
-		unspentPointsLabel.text = "Unspent Points: " + pointsRemaining;
-		strLabel.text = "Strength:\t\t\t" + strength + ((strength != GameControl.control.playerData.stats[(int)GameControl.playerStats.Strength]) ? "*" : "");
-		dexLabel.text = "Dexterity:\t\t\t" + dexterity + ((dexterity != GameControl.control.playerData.stats[(int)GameControl.playerStats.Dexterity]) ? "*" : "");
-		conLabel.text = "Constitution:\t" + constitution + ((constitution != GameControl.control.playerData.stats[(int)GameControl.playerStats.Constitution]) ? "*" : "");
-		intLabel.text = "Intelligence:\t\t" + intelligence + ((intelligence != GameControl.control.playerData.stats[(int)GameControl.playerStats.Intelligence]) ? "*" : "");
-		chaLabel.text = "Charisma:\t\t" + charisma + ((charisma != GameControl.control.playerData.stats[(int)GameControl.playerStats.Charisma]) ? "*" : "");
-		lckLabel.text = "Luck:\t\t\t\t" + luck + ((luck != GameControl.control.playerData.stats[(int)GameControl.playerStats.Luck]) ? "*" : "");
+		// Only if player stats are initialized
+		if (GameControl.control.playerData.stats.Length != 0) {
+			unspentPointsLabel.text = "Unspent Points: " + pointsRemaining;
+			strLabel.text = "Strength:\t\t\t" + strength + ((strength != GameControl.control.playerData.stats [(int)GameControl.playerStats.Strength]) ? "*" : "");
+			dexLabel.text = "Dexterity:\t\t\t" + dexterity + ((dexterity != GameControl.control.playerData.stats [(int)GameControl.playerStats.Dexterity]) ? "*" : "");
+			conLabel.text = "Constitution:\t" + constitution + ((constitution != GameControl.control.playerData.stats [(int)GameControl.playerStats.Constitution]) ? "*" : "");
+			intLabel.text = "Intelligence:\t\t" + intelligence + ((intelligence != GameControl.control.playerData.stats [(int)GameControl.playerStats.Intelligence]) ? "*" : "");
+			chaLabel.text = "Charisma:\t\t" + charisma + ((charisma != GameControl.control.playerData.stats [(int)GameControl.playerStats.Charisma]) ? "*" : "");
+			lckLabel.text = "Luck:\t\t\t\t" + luck + ((luck != GameControl.control.playerData.stats [(int)GameControl.playerStats.Luck]) ? "*" : "");
+		}
 	}
 
 	// ------------------- Character sheet button handlers -------------------
