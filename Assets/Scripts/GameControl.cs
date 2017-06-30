@@ -100,6 +100,16 @@ public class GameControl : MonoBehaviour {
 		savePlayer();
 	}
 
+	public void rerollShopInventory() {
+		// Make new array to hold items
+		control.playerData.shopInventory = new Item[5];
+
+		// Generate each item
+		for (int i = 0; i < 5; i++) {
+			control.playerData.shopInventory [i] = new Weapon (Weapon.WeaponType.Sword, "Sword of Sir Alpha Testings", control.playerData.floor);
+			Debug.Log ("Generated Weapon: " + control.playerData.shopInventory [i].ToString ());
+		}
+	}
 }
 
 // Player Data Container
@@ -118,7 +128,7 @@ public class PlayerData {
 	public Item[] shopInventory;
 
 	public float getItemFind () {
-		return 0;
+		return 1;
 	}
 
     public void resetHealth(int damage)
@@ -145,7 +155,7 @@ public class PlayerData {
 	public int getExperienceForNextLevel () {
 		int baseXp = 50;
 		int factor = 2;
-		return (int) (baseXp * (level) ^ factor);// We don't add 1 because our formula assumes 0 experience at level 1, would normally be base*(level - 1)^factor
+		return (int) (baseXp * Mathf.Pow(level, factor));// We don't add 1 because our formula assumes 0 experience at level 1, would normally be base*(level - 1)^factor
 	}
 
 	public int getExperienceToNextLevel () {

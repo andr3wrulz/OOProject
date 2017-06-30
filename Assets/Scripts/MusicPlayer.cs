@@ -25,7 +25,7 @@ public class MusicPlayer : MonoBehaviour {
 		
 	void Update () {
 		// If the song is over or we need to switch from menu to dungeon or vice versa
-		if (!source.isPlaying || (inDungeon != GameControl.control.inDungeon)) {
+		if (!source.isPlaying) {
 			// Set our current mode locally
 			inDungeon = GameControl.control.inDungeon;
 
@@ -38,5 +38,18 @@ public class MusicPlayer : MonoBehaviour {
 				source.Play ();
 			}
 		}
-	}
+		if (GameControl.control != null && inDungeon != GameControl.control.inDungeon) {
+			// Set our current mode locally
+			inDungeon = GameControl.control.inDungeon;
+
+			// Play appropriate music
+			if (inDungeon) {
+				source.clip = dungeonTracks [Random.Range (0, dungeonTracks.Length)];
+				source.Play ();
+			} else {
+				source.clip = menuTracks [Random.Range (0, menuTracks.Length)];
+				source.Play ();
+			}
+		}
+}
 }

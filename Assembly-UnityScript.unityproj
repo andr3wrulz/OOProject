@@ -6,10 +6,10 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{AF91118F-0306-508C-A405-C2DB9634A77A}</ProjectGuid>
+    <ProjectGuid>{B1FBBFF8-9904-1492-A17E-4E4EB62AD735}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <AssemblyName>Assembly-UnityScript</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>Assets</BaseDirectory>
@@ -46,21 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\ButtonManager.cs" />
-     <Compile Include="Assets\Scripts\CharacterSheetScreen.cs" />
-     <Compile Include="Assets\Scripts\Enemy.cs" />
-     <Compile Include="Assets\Scripts\GameConfig.cs" />
-     <Compile Include="Assets\Scripts\GameControl.cs" />
-     <Compile Include="Assets\Scripts\Inventory.cs" />
-     <Compile Include="Assets\Scripts\Item.cs" />
-     <Compile Include="Assets\Scripts\LoadingManager.cs" />
-     <Compile Include="Assets\Scripts\Moving.cs" />
-     <Compile Include="Assets\Scripts\MusicPlayer.cs" />
-     <Compile Include="Assets\Scripts\NewGameButtonManager.cs" />
-     <Compile Include="Assets\Scripts\Player.cs" />
-     <Compile Include="Assets\Scripts\RoomManager.cs" />
-     <Compile Include="Assets\Scripts\ShopHandler.cs" />
-     <Compile Include="Assets\Scripts\TownStats.cs" />
+     <Compile Include="Assets\Scripts\NewBehaviourScript.js" />
      <None Include="Assets\Audio\emptyFileToPreserveDir.txt" />
      <None Include="Assets\Animations\emptyFileToPreserveDir.txt" />
      <None Include="Assets\Music\Credit Info.txt" />

@@ -5,9 +5,6 @@ using UnityEngine.UI;
 
 public class CharacterSheetScreen : MonoBehaviour {
 
-	enum MenuType {Character, Inventory};
-	MenuType currentScreen;
-
 	public Button characterSheetTabButton;
 	public Button inventoryTabButton;
 
@@ -42,7 +39,6 @@ public class CharacterSheetScreen : MonoBehaviour {
 
 	public void Start () {
 		// Set character sheet at current tab
-		currentScreen = MenuType.Character;
 		inventoryParent.SetActive (false);
 
 		// If the player has leveled up, show the label and add the points
@@ -90,10 +86,10 @@ public class CharacterSheetScreen : MonoBehaviour {
 		Weapon equipped = GameControl.control.playerData.inventory.getWeapon();
 		if (equipped != null) {
 			equippedWeaponSlot.transform.Find ("Name").GetComponent<Text> ().text = equipped.getName ();
-			equippedWeaponSlot.transform.Find ("Value").GetComponent<Text> ().text = equipped.getValue ().ToString();
-			equippedWeaponSlot.transform.Find ("Details1").GetComponent<Text> ().text = "Damage: " + equipped.getMinDamage () + "-" + equipped.getMaxDamage ();
-			equippedWeaponSlot.transform.Find ("Name").GetComponent<Text> ().text = "Crit Multiplier: " + equipped.getCritMultiplier () + "x";
-			equippedWeaponSlot.transform.Find ("Name").GetComponent<Text> ().text = "Range: " + equipped.getRange () + " squares";
+			equippedWeaponSlot.transform.Find ("Value").GetComponent<Text> ().text = "Value: " + equipped.getValue () + " gold";
+			equippedWeaponSlot.transform.Find ("Details1").GetComponent<Text> ().text = "Damage: " + equipped.getMinDamage ().ToString("n0") + "-" + equipped.getMaxDamage ().ToString("n0");
+			equippedWeaponSlot.transform.Find ("Details2").GetComponent<Text> ().text = "Crit Multiplier: " + equipped.getCritMultiplier ().ToString("n2") + "x";
+			equippedWeaponSlot.transform.Find ("Details3").GetComponent<Text> ().text = "Range: " + equipped.getRange () + " squares";
 		} else {
 			equippedWeaponSlot.transform.Find ("Name").GetComponent<Text> ().text = "Empty";
 			equippedWeaponSlot.transform.Find ("Value").GetComponent<Text> ().text = "Value: 0 gold";
@@ -101,6 +97,7 @@ public class CharacterSheetScreen : MonoBehaviour {
 			equippedWeaponSlot.transform.Find ("Details2").GetComponent<Text> ().text = "";
 			equippedWeaponSlot.transform.Find ("Details3").GetComponent<Text> ().text = "";
 		}
+		equippedWeaponSlot.transform.Find ("Icon").GetComponent<SpriteRenderer> ().sprite = getIconForItem(equipped);
 
 		// Update inventory
 		for (int i = 0; i < GameConfig.backpackSlots; i++) {
@@ -108,34 +105,20 @@ public class CharacterSheetScreen : MonoBehaviour {
 			// If there is an item in that slot
 			if (item != null) {
 				inventorySlots [i].transform.Find ("Name").GetComponent<Text> ().text = item.getName ();
-				inventorySlots [i].transform.Find ("Value").GetComponent<Text> ().text = item.getValue ().ToString ();
 
 				// Determine type to fill out details and icon
 				if (item is Weapon) {
 					// Cast it
 					Weapon wep = item as Weapon;
-					inventorySlots [i].transform.Find ("Details1").GetComponent<Text> ().text = "Damage: " + wep.getMinDamage () + "-" + wep.getMaxDamage ();
-					inventorySlots [i].transform.Find ("Details2").GetComponent<Text> ().text = "Crit Multiplier: " + wep.getCritMultiplier () + "x";
+					inventorySlots [i].transform.Find ("Details1").GetComponent<Text> ().text = "Damage: " + wep.getMinDamage ().ToString("n0") + "-" + wep.getMaxDamage ().ToString("n0");
+					inventorySlots [i].transform.Find ("Details2").GetComponent<Text> ().text = "Crit Multiplier: " + wep.getCritMultiplier ().ToString("n2") + "x";
 					inventorySlots [i].transform.Find ("Details3").GetComponent<Text> ().text = "Range: " + wep.getRange () + " squares";
-
-					switch (wep.getWeaponType ()) {
-						case Weapon.WeaponType.Sword:
-							inventorySlots [i].transform.Find ("Icon").GetComponent<SpriteRenderer> ().sprite = swordIcon;
-							break;
-						case Weapon.WeaponType.Dagger:
-							inventorySlots [i].transform.Find ("Icon").GetComponent<SpriteRenderer> ().sprite = daggerIcon;
-							break;
-						case Weapon.WeaponType.Bow:
-							inventorySlots [i].transform.Find ("Icon").GetComponent<SpriteRenderer> ().sprite = bowIcon;
-							break;
-						case Weapon.WeaponType.Wand:
-							inventorySlots [i].transform.Find ("Icon").GetComponent<SpriteRenderer> ().sprite = wandIcon;
-							break;
-					}
+					inventorySlots [i].transform.Find ("Value").GetComponent<Text> ().text = "Value: " + wep.getValue () + " gold";// Use weapon value formula
 				} else {// Is not a weapon
 					inventorySlots [i].transform.Find ("Details1").GetComponent<Text> ().text = "";
 					inventorySlots [i].transform.Find ("Details2").GetComponent<Text> ().text = "";
 					inventorySlots [i].transform.Find ("Details3").GetComponent<Text> ().text = "";
+					inventorySlots [i].transform.Find ("Value").GetComponent<Text> ().text = "Value: " + item.getValue () + " gold";// Use default value formula
 				}
 			} else {// if that slot is empty
 				inventorySlots [i].transform.Find ("Name").GetComponent<Text> ().text = "Empty";
@@ -144,6 +127,7 @@ public class CharacterSheetScreen : MonoBehaviour {
 				inventorySlots [i].transform.Find ("Details2").GetComponent<Text> ().text = "";
 				inventorySlots [i].transform.Find ("Details3").GetComponent<Text> ().text = "";
 			}
+			inventorySlots [i].transform.Find ("Icon").GetComponent<SpriteRenderer> ().sprite = getIconForItem(item);
 		}
 	}
 
@@ -157,16 +141,12 @@ public class CharacterSheetScreen : MonoBehaviour {
 			switch ((i as Weapon).getWeaponType ()) {
 				case Weapon.WeaponType.Sword:
 					return swordIcon;
-					break;
 				case Weapon.WeaponType.Dagger:
 					return daggerIcon;
-					break;
 				case Weapon.WeaponType.Bow:
 					return bowIcon;
-					break;
 				case Weapon.WeaponType.Wand:
 					return wandIcon;
-					break;
 			}
 		}
 
@@ -226,9 +206,6 @@ public class CharacterSheetScreen : MonoBehaviour {
 	}
 
 	public void clickInventoryTab () {
-		// Set screen variable
-		currentScreen = MenuType.Inventory;
-
 		// Swap button states
 		characterSheetTabButton.interactable = true;
 		inventoryTabButton.interactable = false;
@@ -239,9 +216,6 @@ public class CharacterSheetScreen : MonoBehaviour {
 	}
 
 	public void clickCharacterTab () {
-		// Set screen variable
-		currentScreen = MenuType.Character;
-
 		// Swap button states
 		characterSheetTabButton.interactable = false;
 		inventoryTabButton.interactable = true;

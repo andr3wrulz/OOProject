@@ -10,13 +10,11 @@ public class Item {
 
 	ItemType itemType;
 	string name;
-	Sprite icon;
 	int tier;
 
-	public Item(ItemType itemType, string name, Sprite icon, int tier) {
+	public Item(ItemType itemType, string name, int tier) {
 		this.itemType = itemType;
 		this.name = name;
-		this.icon = icon;
 		this.tier = tier;
 	}
 
@@ -36,12 +34,23 @@ public class Item {
 		return name;
 	}
 
-	public Sprite getIcon() {
-		return icon;
+	public int getValue() {
+		if (this is Weapon) {
+			Weapon wep = this as Weapon;
+			return wep.getValue ();
+		} else {
+			return 0;
+		}
 	}
 
-	public int getValue() {
-		return 1;
+	public override string ToString ()
+	{
+		if (this is Weapon) {
+			Weapon wep = this as Weapon;
+			return wep.ToString ();
+		} else {
+			return "Name: '" + name + "' Type: " + ((itemType == ItemType.Weapon) ? "Weapon" : "Armor") + " Tier: " + tier;
+		}
 	}
 }
 
@@ -55,12 +64,10 @@ public class Weapon : Item {
 	float maxDamage;
 	float critMultiplier;
 	int range;// Number of squares
-	Animation attackAnimation;
 
-	public Weapon (WeaponType weaponType, Animation attackAnimation, string name, Sprite icon, int tier) : base (ItemType.Weapon, name, icon, tier) {
+	public Weapon (WeaponType weaponType, string name, int tier) : base (ItemType.Weapon, name, tier) {
 		this.weaponType = weaponType;
 		this.range = getRange();// Range is only based on weapon type
-		this.attackAnimation = attackAnimation;
 		itemVaration ();// Generates our min, max, and crit mult
 	}
 
@@ -89,20 +96,22 @@ public class Weapon : Item {
 		maxDamage = generateMaxDamage();
 
 		// Add stats that affect minimum damage
-		switch (weaponType) {
-			case WeaponType.Dagger:
-			case WeaponType.Sword:
-				minDamage += GameControl.control.playerData.stats [(int)GameControl.playerStats.Strength];
-				break;
-			case WeaponType.Bow:
-				minDamage += GameControl.control.playerData.stats [(int)GameControl.playerStats.Dexterity];
-				break;
-			case WeaponType.Wand:
-				minDamage += GameControl.control.playerData.stats [(int)GameControl.playerStats.Intelligence];
-				break;
+		if (GameControl.control.playerData.stats.Length == 6) {// If the player has stats (ie created from main menu)
+			switch (weaponType) {
+				case WeaponType.Dagger:
+				case WeaponType.Sword:
+					minDamage += GameControl.control.playerData.stats [(int)GameControl.playerStats.Strength];
+					break;
+				case WeaponType.Bow:
+					minDamage += GameControl.control.playerData.stats [(int)GameControl.playerStats.Dexterity];
+					break;
+				case WeaponType.Wand:
+					minDamage += GameControl.control.playerData.stats [(int)GameControl.playerStats.Intelligence];
+					break;
+			}
 		}
 
-		// Generate our case (each enhancement is determined by the binary representation of random)
+		// Generate our case (each enhancement is determined by the binary representation of random, ie each bit represents an enhancement)
 		int random = UnityEngine.Random.Range (0, 8);// [0-7]
 
 		if (random >=4) {// Enhance min damage
@@ -145,9 +154,14 @@ public class Weapon : Item {
 			return GameConfig.wandRange;
 		return 1;
 	}
-    
-	public Animation getAttackAnimation() {
-		return attackAnimation;
+		
+	public new int getValue() {
+		return (int)((minDamage + maxDamage) * critMultiplier);
+	}
+
+	public new string ToString ()
+	{
+		return "Name: '" + getName () + "' Damage: " + minDamage + "-" + maxDamage + " Range: " + range;
 	}
 }
 
@@ -161,7 +175,7 @@ public class Armor : Item {
 	float durability;
 	float healthBonus;
 
-	public Armor(ArmorType armorType, float armorValue, float durability, float healthBonus, string name, Sprite icon, int value) : base (ItemType.Armor, name, icon, value) {
+	public Armor(ArmorType armorType, float armorValue, float durability, float healthBonus, string name,int value) : base (ItemType.Armor, name, value) {
 		this.armorType = armorType;
 		this.armorValue = armorValue;
 		this.durability = durability;

@@ -37,6 +37,24 @@ public class Inventory {
 		backpack[two] = temp;
 	}
 
+	public int getFreeSlotsInBackpack() {
+		int count = 0;
+		for (int i = 0; i < GameConfig.backpackSlots; i++)
+			if (backpack [i] == null)
+				count++;
+
+		return count;
+	}
+
+	public void addItemToBackpack(Item itemToAdd) {
+		for (int i = 0; i < GameConfig.backpackSlots; i++) {
+			if (backpack [i] == null) {
+				backpack [i] = itemToAdd;
+				return;
+			}
+		}
+	}
+
 	// ------------------ Storage Functions ------------------
 	public Item getItemFromStorageAtIndex(int index) {
 		return storage [index];
@@ -56,6 +74,15 @@ public class Inventory {
 		Item temp = storage [one];
 		storage [one] = storage [two];
 		storage [two] = temp;
+	}
+
+	public int getFreeSlotsInStorage() {
+		int count = 0;
+		for (int i = 0; i < GameConfig.storageSlots; i++)
+			if (storage [i] == null)
+				count++;
+
+		return count;
 	}
 
 	// ------------------ Armor Functions ------------------
