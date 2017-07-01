@@ -144,8 +144,9 @@ public class PlayerData {
 		gold += amount;
 	}
 
-	public void refreshLevel () {
+	public int refreshLevel () {
 		level = getLevelForExperience (experience);
+		return level;
 	}
 
 	public void addExperience (int amount) {

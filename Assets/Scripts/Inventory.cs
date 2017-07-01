@@ -5,10 +5,10 @@ using System;
 
 [Serializable]
 public class Inventory {
-	Item [] backpack;
-	Item [] storage;
-	Armor [] armor;
-	Weapon weapon;
+	public Item [] backpack;
+	public Item [] storage;
+	public Armor [] armor;
+	public Weapon weapon;
 
 	public Inventory () {
 		backpack = new Item[GameConfig.backpackSlots];
