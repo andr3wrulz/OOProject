@@ -126,7 +126,7 @@ public class Weapon : Item {
 			maxDamage *= 1 + (UnityEngine.Random.value % GameControl.control.playerData.getItemFind ());
 		}
 
-		if (random%2==1){// Enhance crit chance
+		if (random%2==1){// Enhance crit
 			critMultiplier *= 1 + (UnityEngine.Random.value % (GameControl.control.playerData.getItemFind ()*2));
 		}
 	}
@@ -162,6 +162,15 @@ public class Weapon : Item {
 	public new string ToString ()
 	{
 		return "Name: '" + getName () + "' Damage: " + minDamage + "-" + maxDamage + " Range: " + range;
+	}
+
+	public int getAttackDamage() {
+		int damage = UnityEngine.Random.Range ((int) minDamage, (int) maxDamage);
+
+		if (UnityEngine.Random.value <= GameControl.control.playerData.stats [(int)GameControl.playerStats.Luck] / 50)
+			damage = (int)(critMultiplier*(float)damage);// damage *= critMult; but with casting
+
+		return damage;
 	}
 }
 

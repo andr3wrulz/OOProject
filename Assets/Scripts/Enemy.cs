@@ -3,20 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Enemy : Moving
+public class Enemy : MonoBehaviour
 {
-    public int health;    //type of enemy, 1 slime, 2 skeleton, 3 boss
+    public int health = 1;
     public int attackPower;
-    public int speed = 10;
 
     /* On event settings */
     Animator animator;
 
     float range; //range only applied to long distance attacking foes
 
-    public static Enemy enemy;  
-
-    public Enemy(int type)
+    /*public Enemy(int type)
     {
         switch(type)
         {
@@ -41,77 +38,44 @@ public class Enemy : Moving
                 range = 0;
                 break;
         }
-    }
-
-    public void resetHealth(int damage)
-    {
-        this.health -= damage;
-    }
+    }*/
    
     // Use this for initialization
     void Start ()
     {
-        base.Awake();
+		GameControl.control.addToTurnQueue (this.name);
+		health = 100;// Placeholder so enemies don't destroy themselves every frame
     }
 	
 	// Update is called once per frame
 	void Update ()
 	{
-        /* Enemy dies */
-        if(this.health <= 0)
-        {
-           Destroy(this);
-        }
-
-        /* Enemy moving */
-        int x = 0, y = 0;
-
-
-        // need to set x and y
-
-        Vector2 start = transform.position;
-        Vector2 end = start + new Vector2(x, y);
-        Vector2 newPosition = Vector2.MoveTowards(start, end, speed * Time.deltaTime);
-
-        RaycastHit2D hit;
-        RaycastHit2D longHit;
-
-        // This line is used for testing. 
-        // This line is only seen in scene window.
-
-        Debug.DrawLine(start, end, Color.red);
-
-        if (IsObstacle(x, y, 0, out hit, out longHit))
-        {
-            Debug.Log("Hit Something");
-            // Detect wall only by raycast and still be a distance from wall
-            // so player can move until linecast indicate that player is touching wall.
-            Enemy wallOrEnemy = longHit.transform.GetComponent<Enemy>(); //enemies shouldn't go through each other
-
-            Player temp = hit.transform.GetComponent<Player>();
-
-            if (temp != null)  //attack when you see a player
-            {
-                Attack();
-            }
-
-            if (wallOrEnemy == null && hit.transform == null)
-            {
-                // for debugging
-                Debug.Log("I see wall");
-                ToMove(newPosition);
-            }
-
-        }else
-        {
-            Debug.Log(x + "," + y);
-            ToMove(newPosition);
-        }
+        // Check if it is this object's turn
+		if (GameControl.control.isTurn (this.name)) {
+			//Debug.Log (this.transform.name + " just passed its turn.");
+			GameControl.control.takeTurnWithoutDelay ();
+		}
     }
-    void Attack()
-    {    
+
+    void Attack() {    
         animator.SetTrigger("enemyAttack");
-        Player.player.PlayerGetHit();
-        GameControl.control.playerData.resetHealth(attackPower); 
+		//GameControl.player.GetComponent<Player> ().GetHit ();
+        GameControl.control.playerData.resetHealth(attackPower);
     }
+
+	public void GetHit(int damage) {
+		health -= damage;
+
+		// Enemy died
+		if(health <= 0) {
+			// Add experience to player
+			//GameControl.control.playerData.addExperience(   );
+
+			// Remove enemy from turn queue
+			GameControl.control.removeFromTurnQueue(this.name);
+
+			// Remove enemy from game
+			GameObject.Destroy(this.gameObject);
+		}
+	}
 }

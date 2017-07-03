@@ -7,6 +7,8 @@ using System.IO;
 
 public class GameControl : MonoBehaviour {
 
+	public bool debugLoadFirstPlayerSlot = false;// Manually set to true, this will load the first player slot to get stats and inventory for testing
+
 	public enum playerStats {Strength = 0, Dexterity = 1, Constitution = 2, Intelligence = 3, Charisma = 4, Luck = 5};
 
 	public static GameControl control;// psuedo singleton
@@ -28,6 +30,11 @@ public class GameControl : MonoBehaviour {
 
 	public IntVector2 startRoom;
 
+	// Turn handling
+	ArrayList turnQueue;
+	public GameObject player;
+	public float timeSinceLastTurn = 0;
+
 	// Run when the level initally loads (ie. before Start())
 	void Awake () {
 		if (control == null) {// If we don't have a saved GameControl object, save this one
@@ -36,8 +43,69 @@ public class GameControl : MonoBehaviour {
 		} else if (control != this) {// If we have one, but this isn't it, destroy this one
 			Destroy (gameObject);
 		}
+
+		// Initialize turn queue
+		turnQueue = new ArrayList();
+
+		if (debugLoadFirstPlayerSlot) {
+			saveSlot = 1;
+			loadPlayer ();
+		}
+			
 	}
-		
+
+	// Entities will check if it is their turn via this function
+	public Boolean isTurn(String entity) {
+		return turnQueue[0].Equals(entity) && timeSinceLastTurn > 1f;// It's that entity's turn and it has been long enough
+	}
+
+	// When an entity does something, this function will remove them from the front of the queue and place them at the end
+	public void takeTurn() {
+		turnQueue.Add (turnQueue[0]);
+		turnQueue.RemoveAt(0);
+		timeSinceLastTurn = 0;// Reset timer
+	}
+
+	public void takeTurnWithoutDelay() {
+		turnQueue.Add (turnQueue[0]);
+		turnQueue.RemoveAt (0);
+	}
+
+	public void addToTurnQueue(String entity) {
+		turnQueue.Add(entity);
+	}
+
+	void Update () {
+		updateTurnQueue ();
+	}
+
+	public void removeFromTurnQueue(String name) {
+		turnQueue.Remove (name);
+	}
+
+	void updateTurnQueue () {
+		timeSinceLastTurn += Time.deltaTime;
+		if (timeSinceLastTurn < 1f)// Wait a second between turns
+			return;
+
+		// If we have something in the queue
+		if (turnQueue != null && turnQueue.Count > 0) {
+			// If enemy is at front of queue
+			if (!turnQueue[0].Equals("Player")) {
+				// If we don't have a player
+				if (player == null) {
+					// We need to wait until we have a player
+					Debug.Log("Waiting for player");
+					return;
+				}
+				// Let enemy take care of its own turn
+				Debug.Log("Waiting on " + turnQueue[0] + " to take its turn.");
+				return;
+			}
+			// Else, this means player is at front of queue and should take care of its own turn
+		}
+	}
+
 	// Throw the serialized PlayerData class into a file based on the save slot
 	public void savePlayer () {
 		BinaryFormatter bf = new BinaryFormatter ();

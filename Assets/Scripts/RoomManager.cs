@@ -11,7 +11,7 @@ public class RoomManager : MonoBehaviour{
 	public GameObject stairs;
 	public GameObject shrine;
 	public GameObject [] mobs;    // Array of mobs to choose from
-    private List<Vector3> locations;    //valid locations for enemies
+	private int enemyCount = 0;
 
 	Room [,] rooms;
 	Queue<IntVector2> roomGenerationQueue;
@@ -236,11 +236,15 @@ public class RoomManager : MonoBehaviour{
 
     private void populate(Vector3 position)
     {
-        int probability = Random.Range(1, 20);
-        if (probability == 1)    //1/20th probability of having an enemy per tile
-        {
-            Instantiate(mobs[Random.Range(0, mobs.Length)], position, Quaternion.identity);
-        }//add probabilities of loot further on
+		int probability = Random.Range(1, GameConfig.enemyChancePerTile);
+
+		if (probability == 1) {// 1/20th probability of having an enemy per tile
+			enemyCount++;
+			GameObject enemy = Instantiate(mobs[Random.Range(0, mobs.Length)], position, Quaternion.identity);// Instantiate enemy and add it to turn queue
+			enemy.name = "Enemy " + enemyCount;
+        }
+
+		//add probabilities of loot further on
     }
 
     // Get the correct game object (wall, floor, shrine etc) 
