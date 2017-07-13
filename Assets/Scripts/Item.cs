@@ -81,6 +81,8 @@ public class Weapon : Item {
 				return 7 + (3 * getTier());
 			case WeaponType.Wand:
 				return 8 + (4 * getTier());
+            default:
+                return 7 + (4 * getTier());
 
 		}
 		return 0;

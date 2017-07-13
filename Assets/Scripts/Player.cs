@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
     public Text floorNumber;
 	public Text health;
 	public Text experienceToNextLevel;
+    public Text eventText;
 
     // Use this for initialization
     void Start ()
@@ -51,13 +52,13 @@ public class Player : MonoBehaviour
         miniMapCamera.transform.SetPositionAndRotation(new Vector3(this.transform.position.x,
             this.transform.position.y, miniMapCamera.transform.position.z), Quaternion.identity);
 
-		// Update ui info
-		health.text = "Health: " + GameControl.control.playerData.health;
+        // Update ui info
+        health.text = "Health: " + GameControl.control.playerData.health;
 		floorNumber.text = "Floor: " + GameControl.control.playerData.floor;
 		experienceToNextLevel.text = "Exp to next level: " + GameControl.control.playerData.getExperienceToNextLevel();
 
-		// Keep moving if the player is not at destination yet
-		if (isMoving) {
+        // Keep moving if the player is not at destination yet
+        if (isMoving) {
 			// If we made it to our desination
 			if (Vector3.Distance (this.transform.position, movementDestination) < .01) {
 				// Stop moving
@@ -70,9 +71,10 @@ public class Player : MonoBehaviour
 
 		// If it is the player's turn
 		if (GameControl.control.isTurn (this.name)) {
-			// Is the player trying to move
-			StartMove();
-		}
+            // Is the player trying to move
+            eventText.text = "";
+            StartMove();
+        }
     }
 
 	void StartMove() {
@@ -111,9 +113,19 @@ public class Player : MonoBehaviour
 						return;// Return early to prevent moving into stairs
 					} else if (hit.transform.tag.Equals ("Enemy")) {
 						// Do damage to enemy
-						Attack(hit.transform);
-						// Attacking takes up our turn
-						GameControl.control.takeTurn ();
+						bool killedEnemy = Attack(hit.transform);
+                        if(killedEnemy)
+                        {
+                            // default gold and exp settings
+                            int gold = 1;   
+                            int exp = 1;
+                            GameControl.control.playerData.addGold(gold);
+                            GameControl.control.playerData.addExperience(exp);
+                            eventText.text = "Collected " + gold + " coin";
+                            // Debug.Log("coin collected");
+                        }
+                        // Attacking takes up our turn
+                        GameControl.control.takeTurn ();
 						return;// Return to prevent player from moving into enemy's space
 					} else {
 						// Wall or other non-passable object
@@ -130,13 +142,13 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	void Attack(Transform enemy)
+	bool Attack(Transform enemy)
     {
         /* Player attack settings */
 		animator.SetTrigger("PlayerAttack");
 		int damage = GameControl.control.playerData.inventory.getWeapon ().getAttackDamage ();
-		enemy.GetComponent<Enemy> ().GetHit (damage);
-
+		bool killedEnemy = enemy.GetComponent<Enemy> ().GetHit (damage);
+        return killedEnemy;
 		//Debug.Log ("Hit enemy for " + damage + " damage!");
     }
 
