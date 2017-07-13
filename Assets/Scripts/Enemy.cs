@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour
     {
 		GameControl.control.addToTurnQueue (this.name);
 		health = 100;// Placeholder so enemies don't destroy themselves every frame
+        animator = GetComponent<Animator>();
     }
 	
 	// Update is called once per frame
@@ -28,27 +29,33 @@ public class Enemy : MonoBehaviour
 			//Debug.Log (this.transform.name + " just passed its turn.");
 			GameControl.control.takeTurnWithoutDelay ();
 		}
+        if (health <= 20)
+        {
+            animator.SetTrigger("SlimeDeath");
+        }
+
     }
 
     void Attack() {    
-        animator.SetTrigger("enemyAttack");
-		//GameControl.player.GetComponent<Player> ().GetHit ();
+        animator.SetTrigger("BlueSlimeAttack");
+        animator.SetTrigger("GreenSlimeAttack");
+        animator.SetTrigger("RedSlimeAttack");
+        //GameControl.player.GetComponent<Player> ().GetHit ();
         GameControl.control.playerData.resetHealth(attackPower);
     }
 
 	public bool GetHit(int damage) {
 		health -= damage;
 
-		// Enemy died, return status of enemy for other triggers
+        // Enemy died, return status of enemy for other triggers
+        // Attack when being attacked
+        Attack();
 		if(health <= 0) {
-			// Add experience to player
-			//GameControl.control.playerData.addExperience(   );
-
 			// Remove enemy from turn queue
 			GameControl.control.removeFromTurnQueue(this.name);
 
-			// Remove enemy from game
-			GameObject.Destroy(this.gameObject);
+            // Remove enemy from game
+            GameObject.Destroy(this.gameObject);
             return true;
 		}
         return false;

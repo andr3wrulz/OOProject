@@ -117,8 +117,8 @@ public class Player : MonoBehaviour
                         if(killedEnemy)
                         {
                             // default gold and exp settings
-                            int gold = 1;   
-                            int exp = 1;
+                            int gold = GameControl.control.playerData.floor + 1;   
+                            int exp = GameControl.control.playerData.floor + 1;
                             GameControl.control.playerData.addGold(gold);
                             GameControl.control.playerData.addExperience(exp);
                             eventText.text = "Collected " + gold + " coin";

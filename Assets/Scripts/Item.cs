@@ -83,9 +83,7 @@ public class Weapon : Item {
 				return 8 + (4 * getTier());
             default:
                 return 7 + (4 * getTier());
-
 		}
-		return 0;
 	}
 
 	private void itemVaration () {
