@@ -29,11 +29,6 @@ public class Enemy : MonoBehaviour
 			//Debug.Log (this.transform.name + " just passed its turn.");
 			GameControl.control.takeTurnWithoutDelay ();
 		}
-        if (health <= 20)
-        {
-            animator.SetTrigger("SlimeDeath");
-        }
-
     }
 
     void Attack() {    
@@ -55,7 +50,8 @@ public class Enemy : MonoBehaviour
 			GameControl.control.removeFromTurnQueue(this.name);
 
             // Remove enemy from game
-            GameObject.Destroy(this.gameObject);
+            animator.SetTrigger("SlimeDeath");
+            GameObject.Destroy(this.gameObject,1);
             return true;
 		}
         return false;

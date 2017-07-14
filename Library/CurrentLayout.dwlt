@@ -20,7 +20,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 2}
-  m_MinSize: {x: 950, y: 542}
+  m_MinSize: {x: 950, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -345,9 +345,9 @@ MonoBehaviour:
     height: 694
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: c2060000
+    m_SelectedIDs: a8250000
     m_LastClickedID: 0
-    m_ExpandedIDs: e4fbffff00000000
+    m_ExpandedIDs: e2fbffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -504,9 +504,9 @@ MonoBehaviour:
     - {fileID: 1107144331039772886, guid: e7563e90d11622949bce7281baa61c6d, type: 2}
     m_ValueSerializationHelper:
     - {x: 502.2, y: 335.8023}
-    - {x: 500.2, y: 335.8023}
-    - {x: 500.2, y: 335.8023}
-    - {x: 500.2, y: 335.8023}
+    - {x: 500.2, y: 233.8}
+    - {x: 500.2, y: 233.8}
+    - {x: 500.2, y: 233.8}
   m_PreviewAnimator: {fileID: 0}
   m_AnimatorController: {fileID: 9100000, guid: a24b938519a37674c864c59b6413a4a7,
     type: 2}
@@ -562,19 +562,19 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Scripts
+    - Assets/Animations/AnimatorControllers
   m_ViewMode: 1
   m_StartGridSize: 53
   m_LastFolders:
-  - Assets/Scripts
+  - Assets/Animations/AnimatorControllers
   m_LastFoldersGridSize: 53
   m_LastProjectPath: C:\Users\nicol\Desktop\Processes of OO\OOProject
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 139}
-    m_SelectedIDs: 12250000
-    m_LastClickedID: 9490
-    m_ExpandedIDs: 00000000d424000042250000c8250000d425000000ca9a3bffffff7f
+    m_SelectedIDs: b8260000
+    m_LastClickedID: 9912
+    m_ExpandedIDs: 00000000d824000046250000cc250000d825000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -602,7 +602,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000d424000042250000c8250000d4250000
+    m_ExpandedIDs: 00000000d824000046250000cc250000d8250000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
