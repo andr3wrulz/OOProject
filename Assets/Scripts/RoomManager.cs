@@ -228,8 +228,10 @@ public class RoomManager : MonoBehaviour{
                 Instantiate(tile, new Vector3(roomOffset.x + i, roomOffset.y + j, 0f), Quaternion.identity, parent.transform);
                 if (tile == floors[0] || tile == floors[1] || tile == floors[2] || tile == floors[3])
                 {
-                    // Populate with enemies, loot, etc...
-                    populate(new Vector3(roomOffset.x + i, roomOffset.y + j, -1));
+					if (!rooms [x, y].isStart()) {
+						// Populate with enemies, loot, etc...
+						populate (new Vector3 (roomOffset.x + i, roomOffset.y + j, -1));
+					}
                 }
             }
     }
