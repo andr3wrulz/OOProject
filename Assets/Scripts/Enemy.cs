@@ -112,7 +112,7 @@ public class Enemy : MonoBehaviour
         GameControl.control.playerData.resetHealth(attackPower);
     }
 
-	public bool GetHit(int damage) {
+	public int GetHit(int damage) {
 		health -= damage;
 
         // Enemy died, return status of enemy for other triggers
@@ -125,8 +125,8 @@ public class Enemy : MonoBehaviour
             // Remove enemy from game
             animator.SetTrigger("SlimeDeath");
             GameObject.Destroy(this.gameObject,1);
-            return true;
+            return type;
 		}
-        return false;
+        return -1;
 	}
 }

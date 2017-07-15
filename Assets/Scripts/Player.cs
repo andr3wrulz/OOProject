@@ -122,12 +122,30 @@ public class Player : MonoBehaviour
 						return;// Return early to prevent moving into stairs
 					} else if (hit.transform.tag.Equals ("Enemy")) {
 						// Do damage to enemy
-						bool killedEnemy = Attack(hit.transform);
-                        if(killedEnemy)
+						int killedEnemy = Attack(hit.transform);
+                        if(killedEnemy > 0)
                         {
                             // default gold and exp settings
-                            int gold = GameControl.control.playerData.floor + 1;   
+                            int gold = GameControl.control.playerData.floor + 1;
                             int exp = GameControl.control.playerData.floor + 1;
+
+                            switch (killedEnemy)
+                            {
+                                case 0:
+                                    break;
+                                case 1:
+                                    gold += 2;
+                                    exp += 2;
+                                    break;
+                                case 2:
+                                    gold *= 2;
+                                    exp *= 2;
+                                    break;
+                                case 3:
+                                    gold *= 3;
+                                    exp *= 3;
+                                    break;
+                            }
                             GameControl.control.playerData.addGold(gold);
                             GameControl.control.playerData.addExperience(exp);
                             eventText.text = "Collected " + gold + " coin";
@@ -151,12 +169,12 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	bool Attack(Transform enemy)
+	int Attack(Transform enemy)
     {
         /* Player attack settings */
 		animator.SetTrigger("PlayerAttack");
 		int damage = GameControl.control.playerData.inventory.getWeapon().getAttackDamage();
-		bool killedEnemy = enemy.GetComponent<Enemy>().GetHit(damage);
+		int killedEnemy = enemy.GetComponent<Enemy>().GetHit(damage);
         return killedEnemy;
 		//Debug.Log ("Hit enemy for " + damage + " damage!");
     }
