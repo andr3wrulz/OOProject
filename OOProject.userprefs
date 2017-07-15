@@ -2,10 +2,13 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Player.cs">
     <Files>
-      <File FileName="Assets\Scripts\RoomManager.cs" Line="354" Column="24" />
-      <File FileName="Assets\Scripts\Moving.cs" Line="13" Column="34" />
-      <File FileName="Assets\Scripts\Player.cs" Line="32" Column="20" />
-      <File FileName="Assets\Scripts\LoadingManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\RoomManager.cs" Line="249" Column="41" />
+      <File FileName="Assets\Scripts\Player.cs" Line="186" Column="3" />
+      <File FileName="Assets\Scripts\LoadingManager.cs" Line="46" Column="123" />
+      <File FileName="Assets\Scripts\GameControl.cs" Line="41" Column="8" />
+      <File FileName="Assets\Scripts\ButtonManager.cs" Line="51" Column="41" />
+      <File FileName="Assets\Scripts\Enemy.cs" Line="13" Column="23" />
+      <File FileName="Assets\Scripts\Moving.cs" Line="15" Column="30" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

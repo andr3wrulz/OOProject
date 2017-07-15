@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -21,6 +22,9 @@ public class Player : MonoBehaviour
 	public Text health;
 	public Text experienceToNextLevel;
     public Text eventText;
+	public GameObject ReturnToTownPanel;
+	public GameObject ProceedToNextFloorPanel;
+
 
     // Use this for initialization
     void Start ()
@@ -107,9 +111,11 @@ public class Player : MonoBehaviour
 					// We hit something that we can't move through
 					if (hit.transform.tag.Equals ("Shrine")) {
 						// Handle shrine interaction
+						ReturnToTownPanel.SetActive(true);
 						return;// Return early to prevent moving into shrine
 					} else if (hit.transform.tag.Equals ("Stairs")) {
 						// Handle stair interaction
+						ProceedToNextFloorPanel.SetActive(true);
 						return;// Return early to prevent moving into stairs
 					} else if (hit.transform.tag.Equals ("Enemy")) {
 						// Do damage to enemy
@@ -156,4 +162,39 @@ public class Player : MonoBehaviour
     {
         animator.SetTrigger("PlayerHit");
     }
+
+	public void returnToTown ()
+	{
+		resetToLastMilestone ();
+
+		SceneManager.LoadScene("TownMenu", LoadSceneMode.Single);
+	}
+
+	public void deactivateReturnToTownPanel () 
+	{
+		ReturnToTownPanel.SetActive (false);
+	}
+
+	public void proceedToNextFloor ()
+	{
+		int newFloor = ++GameControl.control.playerData.floor;
+
+		if(newFloor % 3 == 0)
+		{
+			GameControl.control.playerData.lastMilestone=newFloor;
+		}
+
+		SceneManager.LoadScene("Dungeon", LoadSceneMode.Single);
+	}
+
+	public void deactivateProceedToNextFloorPanel () 
+	{
+		ProceedToNextFloorPanel.SetActive (false);
+	}
+
+	public void resetToLastMilestone ()
+	{
+		GameControl.control.playerData.floor = GameControl.control.playerData.lastMilestone;
+	}
+
 }
