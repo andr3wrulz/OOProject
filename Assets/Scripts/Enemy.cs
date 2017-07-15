@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     private int health;
     private int attackPower;
     private int maxHealth;
+    public int type;
 
     /* On event settings */
     Animator animator;
@@ -19,16 +20,52 @@ public class Enemy : MonoBehaviour
     void Start ()
     {
 		GameControl.control.addToTurnQueue (this.name);
-		health = 100;// Placeholder so enemies don't destroy themselves every frame
-        maxHealth = health;
         animator = GetComponent<Animator>();
+        setStats();
+        
         // set healthbar above enemy, canvas is used for healthbar
-        enemyCanvas.transform.SetPositionAndRotation(new Vector3(this.transform.position.x, this.transform.position.y + 1, 
+        float offset = 0.5f;
+        enemyCanvas.transform.SetPositionAndRotation(new Vector3(this.transform.position.x, this.transform.position.y + offset, 
             this.transform.position.z), Quaternion.identity);
-        healthBar.transform.SetPositionAndRotation(new Vector3(this.transform.position.x, this.transform.position.y + 1,
+        healthBar.transform.SetPositionAndRotation(new Vector3(this.transform.position.x, this.transform.position.y + offset,
             this.transform.position.z),Quaternion.identity);
-        //update at least once
+        
+        // update stats according to type
+        switch (type)
+        {
+            case 1:
+                // green slime
+                health += (health/2);
+                attackPower += (attackPower / 2);
+                break;
+            case 2:
+                // red slime
+                health *= 2;
+                attackPower *= 2;
+                break;
+            case 3:
+                // boss slime
+                animator.SetTrigger("SlimeDeath");
+                health *= 3;
+                attackPower *= 3;
+                break;
+            default:
+                //blue slime, nothing changes
+                break;
+        }
+
+        maxHealth = health;
+
+        // update at least once
         UpdateHealthBar();
+
+    }
+
+    void setStats()
+    {
+        // set health and attack power
+        this.health = GameControl.control.playerData.getMaxHealth() / 2;
+        this.attackPower = (GameControl.control.playerData.floor + 1) * 2;
     }
 	
 	// Update is called once per frame
@@ -54,6 +91,7 @@ public class Enemy : MonoBehaviour
         animator.SetTrigger("BlueSlimeAttack");
         animator.SetTrigger("GreenSlimeAttack");
         animator.SetTrigger("RedSlimeAttack");
+        Debug.Log(attackPower);
         GameControl.control.playerData.resetHealth(attackPower);
     }
 

@@ -243,7 +243,7 @@ public class RoomManager : MonoBehaviour{
 		if (probability == 1) {// 1/20th probability of having an enemy per tile
 			enemyCount++;
 			GameObject enemy = Instantiate(mobs[Random.Range(0, mobs.Length)], position, Quaternion.identity);// Instantiate enemy and add it to turn queue
-			enemy.name = "Enemy " + enemyCount;
+			enemy.name = "Enemy " + enemyCount;            
         }
 
 		//add probabilities of loot further on

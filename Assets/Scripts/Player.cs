@@ -152,8 +152,8 @@ public class Player : MonoBehaviour
     {
         /* Player attack settings */
 		animator.SetTrigger("PlayerAttack");
-		int damage = GameControl.control.playerData.inventory.getWeapon ().getAttackDamage ();
-		bool killedEnemy = enemy.GetComponent<Enemy> ().GetHit (damage);
+		int damage = GameControl.control.playerData.inventory.getWeapon().getAttackDamage();
+		bool killedEnemy = enemy.GetComponent<Enemy>().GetHit(damage);
         return killedEnemy;
 		//Debug.Log ("Hit enemy for " + damage + " damage!");
     }
