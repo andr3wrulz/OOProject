@@ -186,7 +186,6 @@ public class Player : MonoBehaviour
 
 	public void returnToTown ()
 	{
-		resetToLastMilestone ();
         GameControl.control.playerData.health = fullHealth;
 		SceneManager.LoadScene("TownMenu", LoadSceneMode.Single);
 	}
@@ -198,14 +197,19 @@ public class Player : MonoBehaviour
 
 	public void proceedToNextFloor ()
 	{
+		updateStatsOnNewFloor ();
+        SceneManager.LoadScene("Dungeon", LoadSceneMode.Single);
+	}
+
+	public void updateStatsOnNewFloor ()
+	{
 		int newFloor = ++GameControl.control.playerData.floor;
 
-		if(newFloor % 3 == 0)
+		if(newFloor % 2 == 1)
 		{
 			GameControl.control.playerData.lastMilestone=newFloor;
 		}
-        GameControl.control.playerData.health = fullHealth;
-        SceneManager.LoadScene("Dungeon", LoadSceneMode.Single);
+		GameControl.control.playerData.health = fullHealth;
 	}
 
 	public void deactivateProceedToNextFloorPanel () 
