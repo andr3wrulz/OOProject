@@ -17,7 +17,7 @@ public class GameConfig {
 	public static int roomsPerLevel = 5;// Width and height of each level in rooms
 	public static float minRoomDensityPerLevel = 0.6f;// 60% of the floor must be populated with rooms
 
-	public static int enemyChancePerTile = 20;
+	public static int enemyChancePerTile = 100;
 
 	public static int minDistanceFromPlayerForEnemyTurn = 10;
 

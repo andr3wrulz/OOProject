@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
 	IntVector2 currentRoom;
 	public Camera mainCamera;
     public Camera miniMapCamera;
+    float fullHealth;
 
 	bool isMoving = false;
 	Vector3 movementDestination;
@@ -43,6 +44,8 @@ public class Player : MonoBehaviour
 		GameControl.control.addToTurnQueue(this.name);
 		GameControl.control.player = this.gameObject;
 
+        // Player stats
+        fullHealth = GameControl.control.playerData.health;
         // Player attack animation 
         animator = GetComponent<Animator>();
     }
@@ -166,7 +169,7 @@ public class Player : MonoBehaviour
 	public void returnToTown ()
 	{
 		resetToLastMilestone ();
-
+        GameControl.control.playerData.health = fullHealth;
 		SceneManager.LoadScene("TownMenu", LoadSceneMode.Single);
 	}
 
@@ -183,8 +186,8 @@ public class Player : MonoBehaviour
 		{
 			GameControl.control.playerData.lastMilestone=newFloor;
 		}
-
-		SceneManager.LoadScene("Dungeon", LoadSceneMode.Single);
+        GameControl.control.playerData.health = fullHealth;
+        SceneManager.LoadScene("Dungeon", LoadSceneMode.Single);
 	}
 
 	public void deactivateProceedToNextFloorPanel () 

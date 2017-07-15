@@ -12,6 +12,7 @@ public class RoomManager : MonoBehaviour{
 	public GameObject shrine;
 	public GameObject [] mobs;    // Array of mobs to choose from
 	private int enemyCount = 0;
+    private int bossCount = 0;
 
 	Room [,] rooms;
 	Queue<IntVector2> roomGenerationQueue;
@@ -240,13 +241,32 @@ public class RoomManager : MonoBehaviour{
     {
 		int probability = Random.Range(1, GameConfig.enemyChancePerTile);
 
-		if (probability == 1) {// 1/20th probability of having an enemy per tile
-			enemyCount++;
-			GameObject enemy = Instantiate(mobs[Random.Range(0, mobs.Length)], position, Quaternion.identity);// Instantiate enemy and add it to turn queue
+		if (probability >= 1 && probability <= 5) {// probability 5%
+            // Instantiate enemy and add it to turn queue
+            enemyCount++;
+            int distribution = Random.Range(1, GameConfig.enemyChancePerTile);
+            GameObject enemy;
+
+            if(distribution < 40) //40% chance of blue slime
+            {
+                enemy = Instantiate(mobs[0], position, Quaternion.identity);
+            }
+            else if(distribution > 40 && distribution < 75) //35% chance of green slime
+            {
+                enemy = Instantiate(mobs[1], position, Quaternion.identity);
+            }
+            else //25% chance of red slime
+            {
+                enemy = Instantiate(mobs[2], position, Quaternion.identity);
+            }
 			enemy.name = "Enemy " + enemyCount;            
         }
-
-		//add probabilities of loot further on
+        else if(probability == 7) // boss slime probability 1%
+        {
+            bossCount++;
+            GameObject enemy = Instantiate(mobs[3], position, Quaternion.identity);// Instantiate enemy and add it to turn queue
+            enemy.name = "Boss " + bossCount;
+        }
     }
 
     // Get the correct game object (wall, floor, shrine etc) 

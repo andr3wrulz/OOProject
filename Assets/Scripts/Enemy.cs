@@ -30,32 +30,6 @@ public class Enemy : MonoBehaviour
         healthBar.transform.SetPositionAndRotation(new Vector3(this.transform.position.x, this.transform.position.y + offset,
             this.transform.position.z),Quaternion.identity);
         
-        // update stats according to type
-        switch (type)
-        {
-            case 1:
-                // green slime
-                health += (health/2);
-                attackPower += (attackPower / 2);
-                break;
-            case 2:
-                // red slime
-                health *= 2;
-                attackPower *= 2;
-                break;
-            case 3:
-                // boss slime
-                animator.SetTrigger("SlimeDeath");
-                health *= 3;
-                attackPower *= 3;
-                break;
-            default:
-                //blue slime, nothing changes
-                break;
-        }
-
-        maxHealth = health;
-
         // update at least once
         UpdateHealthBar();
 
@@ -66,16 +40,43 @@ public class Enemy : MonoBehaviour
         // set health and attack power
         this.health = GameControl.control.playerData.getMaxHealth() / 2;
         this.attackPower = (GameControl.control.playerData.floor + 1) * 2;
+
+        // update stats according to type
+        switch (type)
+        {
+            case 1:
+                // green slime
+                health += (health / 2);
+                attackPower += (attackPower / 2);
+                break;
+            case 2:
+                // red slime
+                health *= 2;
+                attackPower *= 2;
+                break;
+            case 3:
+                // boss slime
+                health *= 3;
+                attackPower *= 3;
+                break;
+            default:
+                //blue slime, nothing changes
+                break;
+        }
+
+        maxHealth = health;
+
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update ()
 	{
         // Check if it is this object's turn
 		if (GameControl.control.isTurn (this.name)) {
 			//Debug.Log (this.transform.name + " just passed its turn.");
 			GameControl.control.takeTurnWithoutDelay ();
-		}
+        }
+
         UpdateHealthBar();
     }
 
@@ -88,9 +89,25 @@ public class Enemy : MonoBehaviour
 
     void Attack() {
         // Trigger respective animation
-        animator.SetTrigger("BlueSlimeAttack");
-        animator.SetTrigger("GreenSlimeAttack");
-        animator.SetTrigger("RedSlimeAttack");
+        switch (type)
+        {
+            case 1:
+                // green slime
+                animator.SetTrigger("GreenSlimeAttack");
+                break;
+            case 2:
+                // red slime
+                animator.SetTrigger("RedSlimeAttack");
+                break;
+            case 3:
+                // boss slime
+                animator.SetTrigger("RedSlimeAttack");
+                break;
+            default:
+                //blue slime
+                animator.SetTrigger("BlueSlimeAttack");
+                break;
+        }
         Debug.Log(attackPower);
         GameControl.control.playerData.resetHealth(attackPower);
     }
@@ -99,9 +116,9 @@ public class Enemy : MonoBehaviour
 		health -= damage;
 
         // Enemy died, return status of enemy for other triggers
-        // Attack when being attacked
+        //Attack when its hit
         Attack();
-		if(health <= 0) {
+        if (health <= 0) {
 			// Remove enemy from turn queue
 			GameControl.control.removeFromTurnQueue(this.name);
 
