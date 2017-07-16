@@ -12,14 +12,13 @@ https://docs.google.com/drawings/d/1uI3V0ayW7-O5ybytLLlC5jm2TejgQSH_vEDgxSffMD8/
 
 https://github.com/andr3wrulz/OOProject/tree/master/Assets/Scripts
 
-### Project Backlog and Burndown Chart (see tabs) 
-
-https://docs.google.com/spreadsheets/d/1vZDFVXAAKPuRh6efogXpvQzJuHwpKrMx2JtkUHALCWc/edit?usp=sharing
-
-
 ### Unit Testing 
 
 https://github.com/andr3wrulz/OOProject/tree/master/Assets/Scripts/Testing
+
+### Project Backlog and Burndown Chart (see tabs) 
+
+https://docs.google.com/spreadsheets/d/1vZDFVXAAKPuRh6efogXpvQzJuHwpKrMx2JtkUHALCWc/edit?usp=sharing
 
 ### Sprints
 
