@@ -12,7 +12,7 @@ public class RoomManager : MonoBehaviour{
 	public GameObject shrine;
 	public GameObject [] mobs;    // Array of mobs to choose from
 	private int enemyCount = 0;
-    private int bossCount = 0;
+    private bool bossExists = true;
 
 	Room [,] rooms;
 	Queue<IntVector2> roomGenerationQueue;
@@ -241,31 +241,31 @@ public class RoomManager : MonoBehaviour{
     {
 		int probability = Random.Range(1, GameConfig.enemyChancePerTile);
 
-		if (probability >= 1 && probability <= 5) {// probability 5%
+		if (probability >= 1 && probability <= 5) {// probability 2.5%
             // Instantiate enemy and add it to turn queue
             enemyCount++;
-            int distribution = Random.Range(1, GameConfig.enemyChancePerTile);
+            int distribution = Random.Range(1, 100);
             GameObject enemy;
 
-            if(distribution < 40) //40% chance of blue slime
+            if(distribution < 50) //50% chance of blue slime
             {
                 enemy = Instantiate(mobs[0], position, Quaternion.identity);
             }
-            else if(distribution > 40 && distribution < 75) //35% chance of green slime
+            else if(distribution > 50 && distribution <= 80) //30% chance of green slime
             {
                 enemy = Instantiate(mobs[1], position, Quaternion.identity);
             }
-            else //25% chance of red slime
+            else //20% chance of red slime
             {
                 enemy = Instantiate(mobs[2], position, Quaternion.identity);
             }
 			enemy.name = "Enemy " + enemyCount;            
         }
-        else if(probability == 7) // boss slime probability 1%
+        else if(probability == 7 && bossExists) // boss slime probability 1%
         {
-            bossCount++;
+            bossExists = false;
             GameObject enemy = Instantiate(mobs[3], position, Quaternion.identity);// Instantiate enemy and add it to turn queue
-            enemy.name = "Boss " + bossCount;
+            enemy.name = "Boss";
         }
     }
 
