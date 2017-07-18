@@ -1,4 +1,4 @@
-# OOProject - Dungeon Champion                   ![alt text](https://github.com/andr3wrulz/OOProject/blob/master/Assets/Sprites/PlayerIcon.png)
+# OOProject - Dungeon Champion  <div align="right"> ![alt text](https://github.com/andr3wrulz/OOProject/blob/master/Assets/Sprites/PlayerIcon.png) </div>
 
 ### Vision Statement 
 
