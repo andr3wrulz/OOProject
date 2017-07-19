@@ -63,6 +63,8 @@
      <Compile Include="Assets\Scripts\Testing\InventoryTesting.cs" />
      <Compile Include="Assets\Scripts\Testing\ItemTesting.cs" />
      <Compile Include="Assets\Scripts\Testing\PlayerTesting.cs" />
+     <Compile Include="Assets\Scripts\Testing\RoomCreationTest.cs" />
+     <Compile Include="Assets\Scripts\Testing\TownStatsTest.cs" />
      <Compile Include="Assets\Scripts\TownStats.cs" />
      <None Include="Assets\Audio\emptyFileToPreserveDir.txt" />
      <None Include="Assets\Animations\emptyFileToPreserveDir.txt" />
