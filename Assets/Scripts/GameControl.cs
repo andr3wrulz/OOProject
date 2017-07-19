@@ -18,6 +18,8 @@ public class GameControl : MonoBehaviour {
 
 	public bool inDungeon = false;// This lets us control the music that is played
 
+	public bool stop;
+
 	// These values are stored to enable us to dynamically create items
 	public Sprite swordIcon;
 	public Sprite daggerIcon;
@@ -61,14 +63,20 @@ public class GameControl : MonoBehaviour {
 
 	// When an entity does something, this function will remove them from the front of the queue and place them at the end
 	public void takeTurn() {
-		turnQueue.Add (turnQueue[0]);
-		turnQueue.RemoveAt(0);
-		timeSinceLastTurn = 0;// Reset timer
+		if(!stop)
+		{
+			turnQueue.Add (turnQueue[0]);
+			turnQueue.RemoveAt(0);
+			timeSinceLastTurn = 0;// Reset timer
+		}
 	}
 
 	public void takeTurnWithoutDelay() {
-		turnQueue.Add (turnQueue[0]);
-		turnQueue.RemoveAt (0);
+		if (!stop) 
+		{
+			turnQueue.Add (turnQueue [0]);
+			turnQueue.RemoveAt (0);
+		}
 	}
 
 	public void addToTurnQueue(String entity) {

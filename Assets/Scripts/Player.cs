@@ -23,13 +23,22 @@ public class Player : MonoBehaviour
 	public Text health;
 	public Text experienceToNextLevel;
     public Text eventText;
-	public GameObject ReturnToTownPanel;
-	public GameObject ProceedToNextFloorPanel;
+	public Text loadingFloorNumber;
+	public Text loadingMilestoneText;
+	public GameObject returnToTownPanel;
+	public GameObject proceedToNextFloorPanel;
+	public GameObject floorLoadingPanel;
 
 
     // Use this for initialization
     void Start ()
     {
+		GameControl.control.stop = true;
+		// Pauses the game to display the current floor/milestone for the player
+		loadingFloorNumber.text = "Floor number: " + GameControl.control.playerData.floor;
+		loadingMilestoneText.text = "Current milestone: " + GameControl.control.playerData.floor;
+		floorLoadingPanel.SetActive (true);
+
 		// Put player in correct start room
 		currentRoom = GameControl.control.startRoom;
 
@@ -92,7 +101,7 @@ public class Player : MonoBehaviour
 		y = (int)Input.GetAxisRaw("Vertical");
 
 		// If there was some input
-		if (x != 0 || y != 0) {
+		if ((x != 0 || y != 0) && !GameControl.control.stop) {
 			// This prevents diagonal move. 
 			if (x != 0) {
 				y = 0;
@@ -114,11 +123,12 @@ public class Player : MonoBehaviour
 					// We hit something that we can't move through
 					if (hit.transform.tag.Equals ("Shrine")) {
 						// Handle shrine interaction
-						ReturnToTownPanel.SetActive(true);
+						GameControl.control.stop=true;
+						returnToTownPanel.SetActive(true);
 						return;// Return early to prevent moving into shrine
 					} else if (hit.transform.tag.Equals ("Stairs")) {
 						// Handle stair interaction
-						ProceedToNextFloorPanel.SetActive(true);
+						proceedToNextFloorPanel.SetActive(true);
 						return;// Return early to prevent moving into stairs
 					} else if (hit.transform.tag.Equals ("Enemy")) {
 						// Do damage to enemy
@@ -184,24 +194,31 @@ public class Player : MonoBehaviour
         animator.SetTrigger("PlayerHit");
     }
 
-	public void returnToTown ()
+	public void ContinueAfterFloorLoadingPanel()
+	{
+		GameControl.control.stop = false;
+		floorLoadingPanel.SetActive (false);
+	}
+
+	public void ReturnToTown ()
 	{
         GameControl.control.playerData.health = fullHealth;
 		SceneManager.LoadScene("TownMenu", LoadSceneMode.Single);
 	}
 
-	public void deactivateReturnToTownPanel () 
+	public void DeactivateReturnToTownPanel () 
 	{
-		ReturnToTownPanel.SetActive (false);
+		GameControl.control.stop = false;
+		returnToTownPanel.SetActive (false);
 	}
 
-	public void proceedToNextFloor ()
+	public void ProceedToNextFloor ()
 	{
-		updateStatsOnNewFloor ();
+		UpdateStatsOnNewFloor ();
         SceneManager.LoadScene("Dungeon", LoadSceneMode.Single);
 	}
 
-	public void updateStatsOnNewFloor ()
+	public void UpdateStatsOnNewFloor ()
 	{
 		int newFloor = ++GameControl.control.playerData.floor;
 
@@ -212,12 +229,13 @@ public class Player : MonoBehaviour
 		GameControl.control.playerData.health = fullHealth;
 	}
 
-	public void deactivateProceedToNextFloorPanel () 
+	public void DeactivateProceedToNextFloorPanel () 
 	{
-		ProceedToNextFloorPanel.SetActive (false);
+		GameControl.control.stop = false;
+		proceedToNextFloorPanel.SetActive (false);
 	}
 
-	public void resetToLastMilestone ()
+	public void ResetToLastMilestone ()
 	{
 		GameControl.control.playerData.floor = GameControl.control.playerData.lastMilestone;
 	}
