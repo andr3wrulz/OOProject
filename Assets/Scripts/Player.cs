@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     Animator animator;
 
     /* UI */
+	public GameObject displayedStats;
     public Text floorNumber;
 	public Text health;
 	public Text experienceToNextLevel;
@@ -28,12 +29,13 @@ public class Player : MonoBehaviour
 	public GameObject returnToTownPanel;
 	public GameObject proceedToNextFloorPanel;
 	public GameObject floorLoadingPanel;
+	public GameObject gameOverPanel;
 
 
     // Use this for initialization
     void Start ()
     {
-		GameControl.control.stop = true;
+		StopMovement (true);
 		// Pauses the game to display the current floor/milestone for the player
 		loadingFloorNumber.text = "Floor number: " + GameControl.control.playerData.floor;
 		loadingMilestoneText.text = "Current milestone: " + GameControl.control.playerData.floor;
@@ -50,7 +52,7 @@ public class Player : MonoBehaviour
 			Quaternion.identity);// Rotation
 
 		// Add player to turn queue
-		GameControl.control.addToTurnQueue(this.name);
+		GameControl.control.addToTurnQueue (this.name);
 		GameControl.control.player = this.gameObject;
 
         // Player stats
@@ -71,7 +73,12 @@ public class Player : MonoBehaviour
         // Update ui info
         health.text = "Health: " + GameControl.control.playerData.health;
 		floorNumber.text = "Floor: " + GameControl.control.playerData.floor;
-		experienceToNextLevel.text = "Exp to next level: " + GameControl.control.playerData.getExperienceToNextLevel();
+		experienceToNextLevel.text = "Exp to next level: " + GameControl.control.playerData.getExperienceToNextLevel ();
+
+		if (GameControl.control.playerData.health == 0) 
+		{
+			GameOver ();
+		}
 
         // Keep moving if the player is not at destination yet
         if (isMoving) {
@@ -89,7 +96,7 @@ public class Player : MonoBehaviour
 		if (GameControl.control.isTurn (this.name)) {
             // Is the player trying to move
             eventText.text = "";
-            StartMove();
+			StartMove ();
         }
     }
 
@@ -97,8 +104,8 @@ public class Player : MonoBehaviour
 		/* Player moving code */
 		int x, y;
 
-		x = (int)Input.GetAxisRaw("Horizontal");
-		y = (int)Input.GetAxisRaw("Vertical");
+		x = (int)Input.GetAxisRaw ("Horizontal");
+		y = (int)Input.GetAxisRaw ("Vertical");
 
 		// If there was some input
 		if ((x != 0 || y != 0) && !GameControl.control.stop) {
@@ -123,12 +130,13 @@ public class Player : MonoBehaviour
 					// We hit something that we can't move through
 					if (hit.transform.tag.Equals ("Shrine")) {
 						// Handle shrine interaction
-						GameControl.control.stop=true;
-						returnToTownPanel.SetActive(true);
+						StopMovement (true);
+						returnToTownPanel.SetActive (true);
 						return;// Return early to prevent moving into shrine
 					} else if (hit.transform.tag.Equals ("Stairs")) {
 						// Handle stair interaction
-						proceedToNextFloorPanel.SetActive(true);
+						StopMovement (true);
+						proceedToNextFloorPanel.SetActive (true);
 						return;// Return early to prevent moving into stairs
 					} else if (hit.transform.tag.Equals ("Enemy")) {
 						// Do damage to enemy
@@ -156,8 +164,8 @@ public class Player : MonoBehaviour
                                     exp *= 3;
                                     break;
                             }
-                            GameControl.control.playerData.addGold(gold);
-                            GameControl.control.playerData.addExperience(exp);
+							GameControl.control.playerData.addGold (gold);
+							GameControl.control.playerData.addExperience (exp);
                             eventText.text = "Collected " + gold + " coin";
                             // Debug.Log("coin collected");
                         }
@@ -179,19 +187,19 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	int Attack(Transform enemy)
+	int Attack (Transform enemy)
     {
         /* Player attack settings */
-		animator.SetTrigger("PlayerAttack");
+		animator.SetTrigger ("PlayerAttack");
 		int damage = GameControl.control.playerData.inventory.getWeapon().getAttackDamage();
 		int killedEnemy = enemy.GetComponent<Enemy>().GetHit(damage);
         return killedEnemy;
 		//Debug.Log ("Hit enemy for " + damage + " damage!");
     }
 
-	public void GetHit(int damage)
+	public void GetHit (int damage)
     {
-        animator.SetTrigger("PlayerHit");
+		animator.SetTrigger ("PlayerHit");
     }
 
 	public void ContinueAfterFloorLoadingPanel()
@@ -203,19 +211,19 @@ public class Player : MonoBehaviour
 	public void ReturnToTown ()
 	{
         GameControl.control.playerData.health = fullHealth;
-		SceneManager.LoadScene("TownMenu", LoadSceneMode.Single);
+		SceneManager.LoadScene ("TownMenu", LoadSceneMode.Single);
 	}
 
 	public void DeactivateReturnToTownPanel () 
 	{
-		GameControl.control.stop = false;
+		StopMovement (false);
 		returnToTownPanel.SetActive (false);
 	}
 
 	public void ProceedToNextFloor ()
 	{
 		UpdateStatsOnNewFloor ();
-        SceneManager.LoadScene("Dungeon", LoadSceneMode.Single);
+		SceneManager.LoadScene ("Dungeon", LoadSceneMode.Single);
 	}
 
 	public void UpdateStatsOnNewFloor ()
@@ -231,7 +239,7 @@ public class Player : MonoBehaviour
 
 	public void DeactivateProceedToNextFloorPanel () 
 	{
-		GameControl.control.stop = false;
+		StopMovement (false);
 		proceedToNextFloorPanel.SetActive (false);
 	}
 
@@ -240,4 +248,33 @@ public class Player : MonoBehaviour
 		GameControl.control.playerData.floor = GameControl.control.playerData.lastMilestone;
 	}
 
+	public void StopMovement (bool movement)
+	{
+		GameControl.control.stop = movement;
+	}
+
+	public void GameOver ()
+	{
+		StopMovement (true);
+		animator.SetTrigger("PlayerDeath");
+		DeactivateStats ();
+		LoadGameOverPanel ();
+		ResetToLastMilestone ();
+	}
+
+	public void DeactivateStats ()
+	{
+		displayedStats.SetActive (false);
+	}
+
+	public void LoadGameOverPanel ()
+	{
+		gameOverPanel.SetActive (true);
+	}
+
+	public void ContinueAfterGameOver ()
+	{
+		StopMovement (false);
+		ReturnToTown ();
+	}
 }

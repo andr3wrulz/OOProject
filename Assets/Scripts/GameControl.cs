@@ -57,21 +57,21 @@ public class GameControl : MonoBehaviour {
 	}
 
 	// Entities will check if it is their turn via this function
-	public Boolean isTurn(String entity) {
+	public Boolean isTurn (String entity) {
 		return turnQueue[0].Equals(entity) && timeSinceLastTurn > 1f;// It's that entity's turn and it has been long enough
 	}
 
 	// When an entity does something, this function will remove them from the front of the queue and place them at the end
-	public void takeTurn() {
+	public void takeTurn () {
 		if(!stop)
 		{
 			turnQueue.Add (turnQueue[0]);
-			turnQueue.RemoveAt(0);
+			turnQueue.RemoveAt (0);
 			timeSinceLastTurn = 0;// Reset timer
 		}
 	}
 
-	public void takeTurnWithoutDelay() {
+	public void takeTurnWithoutDelay () {
 		if (!stop) 
 		{
 			turnQueue.Add (turnQueue [0]);
@@ -79,7 +79,7 @@ public class GameControl : MonoBehaviour {
 		}
 	}
 
-	public void addToTurnQueue(String entity) {
+	public void addToTurnQueue (String entity) {
 		turnQueue.Add(entity);
 	}
 
@@ -87,7 +87,7 @@ public class GameControl : MonoBehaviour {
 		updateTurnQueue ();
 	}
 
-	public void removeFromTurnQueue(String name) {
+	public void removeFromTurnQueue (String name) {
 		turnQueue.Remove (name);
 	}
 
@@ -176,7 +176,7 @@ public class GameControl : MonoBehaviour {
 		savePlayer();
 	}
 
-	public void rerollShopInventory() {
+	public void rerollShopInventory () {
 		// Make new array to hold items
 		control.playerData.shopInventory = new Item[5];
 
@@ -207,9 +207,14 @@ public class PlayerData {
 		return 1;
 	}
 
-    public void resetHealth(int damage)
+    public void resetHealth (int damage)
     {
-        this.health -= damage;
+		if (this.health - damage <= 0) 
+		{
+			this.health = 0;
+		}
+		else
+        	this.health -= damage;
     }
 
 	public int getMaxHealth () {
@@ -250,4 +255,5 @@ public class PlayerData {
 
 		return lvl;
 	}
+
 }
