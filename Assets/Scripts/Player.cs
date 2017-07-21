@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
 		StopMovement (true);
 		// Pauses the game to display the current floor/milestone for the player
 		loadingFloorNumber.text = "Floor number: " + GameControl.control.playerData.floor;
-		loadingMilestoneText.text = "Current milestone: " + GameControl.control.playerData.floor;
+		loadingMilestoneText.text = "Current milestone: " + GameControl.control.playerData.lastMilestone;
 		floorLoadingPanel.SetActive (true);
 
 		// Put player in correct start room
@@ -248,9 +248,9 @@ public class Player : MonoBehaviour
 		GameControl.control.playerData.floor = GameControl.control.playerData.lastMilestone;
 	}
 
-	public void StopMovement (bool movement)
+	public void StopMovement (bool disableMovement)
 	{
-		GameControl.control.stop = movement;
+		GameControl.control.stop = disableMovement;
 	}
 
 	public void GameOver ()
