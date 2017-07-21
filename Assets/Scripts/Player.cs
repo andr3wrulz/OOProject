@@ -197,7 +197,7 @@ public class Player : MonoBehaviour
 		//Debug.Log ("Hit enemy for " + damage + " damage!");
     }
 
-	public void GetHit (int damage)
+	public void PlayHitAnimation ()
     {
 		animator.SetTrigger ("PlayerHit");
     }

@@ -110,6 +110,7 @@ public class Enemy : MonoBehaviour
         }
         Debug.Log(attackPower);
         GameControl.control.playerData.resetHealth(attackPower);
+		GameControl.control.player.GetComponent<Player> ().PlayHitAnimation ();
     }
 
 	public int GetHit(int damage) {

@@ -14,6 +14,7 @@ public class ButtonManager : MonoBehaviour {
 	public int characterSheet;
 	public int mainMenu;
 	public int credits;
+	public int tutorial = 8;
 
 	// ------------------ Main Menu ------------------
 	public void loadNewGameScene()
