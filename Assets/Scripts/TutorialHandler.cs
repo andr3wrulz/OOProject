@@ -55,7 +55,7 @@ public class TutorialHandler : MonoBehaviour {
 			break;
 		case 102:
 			tutorialState = 103;
-			showMessageBox ("Tutorial", "This tutorial will teach you", "about how to play and hopefully", "give you some idea of what's", "going one in our game world.", 104);
+			showMessageBox ("Tutorial", "This tutorial will teach you", "about how to play and hopefully", "give you some idea of what's", "going on in our game world.", 104);
 			break;
 		case 104:
 			tutorialState = 105;

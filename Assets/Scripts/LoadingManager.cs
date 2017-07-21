@@ -81,7 +81,7 @@ public class LoadingManager : MonoBehaviour {
 		currentSlotText.text = "Current Selection: Slot " + currentSelection;
 	}
 
-	public void continuePressed() {
+	public void ContinuePressed() {
 		// No matter what, set current selection in GameControl
 		GameControl.control.saveSlot = currentSelection;
 
@@ -89,10 +89,25 @@ public class LoadingManager : MonoBehaviour {
 		if ((currentSelection == 1 && slot1Valid) ||
 			(currentSelection == 2 && slot2Valid) ||
 			(currentSelection == 3 && slot3Valid)) {
-			GameControl.control.loadPlayer ();
+			GameControl.control.LoadPlayer ();
 			SceneManager.LoadScene ("TownMenu");
 		} else {// No save file found in slot, start new game
 			SceneManager.LoadScene ("NewGame");
 		}
+	}
+
+	public void DeletePressed() {
+		// No matter what, set current selection in GameControl
+		GameControl.control.saveSlot = currentSelection;
+
+		// No we see if we can load the selected slot
+		if ((currentSelection == 1 && slot1Valid) ||
+		    (currentSelection == 2 && slot2Valid) ||
+		    (currentSelection == 3 && slot3Valid)) {
+			GameControl.control.DeletePlayer ();
+		}
+		slot1Valid = setSlotText (1, slot1Text);
+		slot2Valid = setSlotText (2, slot2Text);
+		slot3Valid = setSlotText (3, slot3Text);
 	}
 }

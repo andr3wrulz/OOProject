@@ -51,7 +51,7 @@ public class GameControl : MonoBehaviour {
 
 		if (debugLoadFirstPlayerSlot) {
 			saveSlot = 1;
-			loadPlayer ();
+			LoadPlayer ();
 		}
 			
 	}
@@ -133,7 +133,7 @@ public class GameControl : MonoBehaviour {
 	}
 
 	// Pull PlayerData from the save slot based file
-	public void loadPlayer () {
+	public void LoadPlayer () {
 		if (File.Exists(Application.persistentDataPath + "/playerSave" + saveSlot + ".banana")) {
 			BinaryFormatter bf = new BinaryFormatter();
 			FileStream file = null;
@@ -156,6 +156,26 @@ public class GameControl : MonoBehaviour {
 				file.Close();
 
 			Debug.Log ("[GameControl] Loaded file: " + Application.persistentDataPath + "/playerSave" + saveSlot + ".banana");
+		}
+	}
+
+	// Pull PlayerData from the save slot based file
+	public void DeletePlayer () {
+		if (File.Exists(Application.persistentDataPath + "/playerSave" + saveSlot + ".banana")) {
+			BinaryFormatter bf = new BinaryFormatter();
+			FileStream file = null;
+
+			try {
+				File.Delete(Application.persistentDataPath + "/playerSave" + saveSlot + ".banana");
+			} catch (Exception e) {
+				Debug.LogError ("[GameControl] Failed to delete file in slot: " + saveSlot + "!");
+				Debug.LogError ("[GameControl] " + e);
+			}
+
+			if (file != null)
+				file.Close();
+
+			Debug.Log ("[GameControl] Deleted file: " + Application.persistentDataPath + "/playerSave" + saveSlot + ".banana");
 		}
 	}
 

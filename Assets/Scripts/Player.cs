@@ -204,7 +204,7 @@ public class Player : MonoBehaviour
 
 	public void ContinueAfterFloorLoadingPanel()
 	{
-		GameControl.control.stop = false;
+		StopMovement (false);
 		floorLoadingPanel.SetActive (false);
 	}
 
