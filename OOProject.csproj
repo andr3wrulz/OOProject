@@ -86,6 +86,7 @@
     <Compile Include="Assets\Scripts\Inventory.cs" />
     <Compile Include="Assets\Scripts\Item.cs" />
     <Compile Include="Assets\Scripts\LoadingManager.cs" />
+    <Compile Include="Assets\Scripts\Loot.cs" />
     <Compile Include="Assets\Scripts\Moving.cs" />
     <Compile Include="Assets\Scripts\MusicPlayer.cs" />
     <Compile Include="Assets\Scripts\NewGameButtonManager.cs" />
@@ -95,7 +96,10 @@
     <Compile Include="Assets\Scripts\Testing\InventoryTesting.cs" />
     <Compile Include="Assets\Scripts\Testing\ItemTesting.cs" />
     <Compile Include="Assets\Scripts\Testing\PlayerTesting.cs" />
+    <Compile Include="Assets\Scripts\Testing\RoomCreationTest.cs" />
+    <Compile Include="Assets\Scripts\Testing\TownStatsTest.cs" />
     <Compile Include="Assets\Scripts\TownStats.cs" />
+    <Compile Include="Assets\Scripts\TutorialHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Animations\emptyFileToPreserveDir.txt" />

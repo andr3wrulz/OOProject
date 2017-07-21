@@ -11,6 +11,8 @@ public class RoomManager : MonoBehaviour{
 	public GameObject stairs;
 	public GameObject shrine;
 	public GameObject [] mobs;    // Array of mobs to choose from
+    public GameObject loot;
+    private int bagCount = 0;
 	private int enemyCount = 0;
     private bool bossExists = true;
 
@@ -239,19 +241,21 @@ public class RoomManager : MonoBehaviour{
 
     private void populate(Vector3 position)
     {
+        // Chances of an enemy
+
 		int probability = Random.Range(1, GameConfig.enemyChancePerTile);
 
-		if (probability >= 1 && probability <= 5) {// probability 2.5%
+        if (probability >= 1 && probability <= 5) {// probability 2.5%
             // Instantiate enemy and add it to turn queue
             enemyCount++;
             int distribution = Random.Range(1, 100);
             GameObject enemy;
 
-            if(distribution < 50) //50% chance of blue slime
+            if (distribution < 50) //50% chance of blue slime
             {
                 enemy = Instantiate(mobs[0], position, Quaternion.identity);
             }
-            else if(distribution > 50 && distribution <= 80) //30% chance of green slime
+            else if (distribution > 50 && distribution <= 80) //30% chance of green slime
             {
                 enemy = Instantiate(mobs[1], position, Quaternion.identity);
             }
@@ -259,14 +263,27 @@ public class RoomManager : MonoBehaviour{
             {
                 enemy = Instantiate(mobs[2], position, Quaternion.identity);
             }
-			enemy.name = "Enemy " + enemyCount;            
+            enemy.name = "Enemy " + enemyCount;
         }
-        else if(probability == 7 && bossExists) // boss slime probability 1%
+        else if (probability == 7 && bossExists) // boss slime probability 1%
         {
             bossExists = false;
             GameObject enemy = Instantiate(mobs[3], position, Quaternion.identity);// Instantiate enemy and add it to turn queue
             enemy.name = "Boss";
         }
+        else
+        {
+            // Chances of loot
+
+            probability = Random.Range(1, GameConfig.lootChancePerTile);
+
+            if (probability >= 1 && probability <= 5)
+            {
+                GameObject bag;
+                bag = Instantiate(loot, position, Quaternion.identity);
+                bag.name = "LootBag " + bagCount++;
+            }
+        }       
     }
 
     // Get the correct game object (wall, floor, shrine etc) 

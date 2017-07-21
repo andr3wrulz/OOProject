@@ -172,10 +172,25 @@ public class Player : MonoBehaviour
                         // Attacking takes up our turn
                         GameControl.control.takeTurn ();
 						return;// Return to prevent player from moving into enemy's space
-					} else {
-						// Wall or other non-passable object
-						return;// Return so player doesnt move
-					}
+					} else if(hit.transform.tag.Equals("loot")){
+                        // get loot bag
+                        int bag = hit.transform.GetComponent<Loot>().GetLoot(this.fullHealth);
+                        if(bag < 0) //gained health
+                        {
+                            bag *= -1;
+                            eventText.text = "Gained " + bag + " health!";
+                        }
+                        else
+                        {
+                            eventText.text = "Collected " + bag + " coin!";
+                        }
+                        GameControl.control.takeTurn();
+                    }
+                    else
+                    {
+                        // Wall or other non-passable object
+                        return;// Return so player doesnt move
+                    }
 				}
 			}
 

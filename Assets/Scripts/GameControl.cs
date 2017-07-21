@@ -238,6 +238,11 @@ public class PlayerData {
         	this.health -= damage;
     }
 
+    public void gainHealth(float health)
+    {
+        this.health += health;
+    }
+
 	public int getMaxHealth () {
 		return 100 + stats [(int) GameControl.playerStats.Constitution] * GameConfig.hitpointsPerConstitutionPoint;
 	}
