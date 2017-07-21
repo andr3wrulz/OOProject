@@ -105,6 +105,7 @@ public class CharacterSheetScreen : MonoBehaviour {
 			// If there is an item in that slot
 			if (item != null) {
 				inventorySlots [i].transform.Find ("Name").GetComponent<Text> ().text = item.getName ();
+				//Debug.LogError ("Item updated: " + inventorySlots [i].ToString());
 
 				// Determine type to fill out details and icon
 				if (item is Weapon) {

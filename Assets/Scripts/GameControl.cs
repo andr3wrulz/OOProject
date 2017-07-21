@@ -162,7 +162,6 @@ public class GameControl : MonoBehaviour {
 	// Pull PlayerData from the save slot based file
 	public void DeletePlayer () {
 		if (File.Exists(Application.persistentDataPath + "/playerSave" + saveSlot + ".banana")) {
-			BinaryFormatter bf = new BinaryFormatter();
 			FileStream file = null;
 
 			try {
@@ -191,6 +190,8 @@ public class GameControl : MonoBehaviour {
 		playerData.gold = 0;
 		playerData.unspentPoints = 0;
 		//playerData.inventory.setWeapon(new Weapon (Weapon.WeaponType.Sword, 1, 1, 2, 1, 
+		for(int i=0; i<GameConfig.backpackSlots; i++) // Start with empty backpack
+			playerData.inventory.removeItemFromBackpackAtIndex(i);
 
 		// After we populate the data, go ahead and save it
 		savePlayer();
