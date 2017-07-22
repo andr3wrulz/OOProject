@@ -245,7 +245,8 @@ public class RoomManager : MonoBehaviour{
 
 		int probability = Random.Range(1, GameConfig.enemyChancePerTile);
 
-        if (probability >= 1 && probability <= 5) {// probability 2.5%
+        if (probability >= 1 && probability <= 5) // probability 2.5%
+        {
             // Instantiate enemy and add it to turn queue
             enemyCount++;
             int distribution = Random.Range(1, 100);
@@ -265,7 +266,7 @@ public class RoomManager : MonoBehaviour{
             }
             enemy.name = "Enemy " + enemyCount;
         }
-        else if (probability == 7 && bossExists) // boss slime probability 1%
+        else if (probability % 7 == 0 && bossExists) // boss slime probability 1%
         {
             bossExists = false;
             GameObject enemy = Instantiate(mobs[3], position, Quaternion.identity);// Instantiate enemy and add it to turn queue

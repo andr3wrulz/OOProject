@@ -36,20 +36,8 @@ public class Player : MonoBehaviour
     void Start ()
     {
 		StopMovement (true);
-		// Pauses the game to display the current floor/milestone for the player
-		loadingFloorNumber.text = "Floor number: " + GameControl.control.playerData.floor;
-		loadingMilestoneText.text = "Current milestone: " + GameControl.control.playerData.lastMilestone;
-		floorLoadingPanel.SetActive (true);
-
-		// Put player in correct start room
-		currentRoom = GameControl.control.startRoom;
-
-		// Set position to one square below center in the start room
-		this.transform.SetPositionAndRotation (new Vector3 (
-			currentRoom.x * GameConfig.tilesPerRoom + GameConfig.tilesPerRoom/2,// Xpos
-			currentRoom.y * GameConfig.tilesPerRoom + GameConfig.tilesPerRoom/2 - 1,// Ypos
-			1),// ZPos
-			Quaternion.identity);// Rotation
+        StartUpDisplay();
+        PositionPlayer();
 
 		// Add player to turn queue
 		GameControl.control.addToTurnQueue (this.name);
@@ -60,22 +48,52 @@ public class Player : MonoBehaviour
         // Player attack animation 
         animator = GetComponent<Animator>();
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    void StartUpDisplay()
     {
-		// Lock cameras to current position
-		mainCamera.transform.SetPositionAndRotation (new Vector3 (this.transform.position.x,
-			this.transform.position.y, mainCamera.transform.position.z), Quaternion.identity);
+        // Pauses the game to display the current floor/milestone for the player
+        loadingFloorNumber.text = "Floor number: " + GameControl.control.playerData.floor;
+        loadingMilestoneText.text = "Current milestone: " + GameControl.control.playerData.lastMilestone;
+        floorLoadingPanel.SetActive(true);
+    }
+
+    void PositionPlayer()
+    {
+        // Put player in correct start room
+        currentRoom = GameControl.control.startRoom;
+
+        // Set position to one square below center in the start room
+        this.transform.SetPositionAndRotation(new Vector3(
+            currentRoom.x * GameConfig.tilesPerRoom + GameConfig.tilesPerRoom / 2,// Xpos
+            currentRoom.y * GameConfig.tilesPerRoom + GameConfig.tilesPerRoom / 2 - 1,// Ypos
+            1),// ZPos
+            Quaternion.identity);// Rotation
+    }
+
+    void UpdateCameras()
+    {
+        // Lock cameras to current position
+        mainCamera.transform.SetPositionAndRotation(new Vector3(this.transform.position.x,
+            this.transform.position.y, mainCamera.transform.position.z), Quaternion.identity);
         miniMapCamera.transform.SetPositionAndRotation(new Vector3(this.transform.position.x,
             this.transform.position.y, miniMapCamera.transform.position.z), Quaternion.identity);
+    }
 
+    void UpdateUI()
+    {
         // Update ui info
         health.text = "Health: " + GameControl.control.playerData.health;
-		floorNumber.text = "Floor: " + GameControl.control.playerData.floor;
-		experienceToNextLevel.text = "Exp to next level: " + GameControl.control.playerData.getExperienceToNextLevel ();
+        floorNumber.text = "Floor: " + GameControl.control.playerData.floor;
+        experienceToNextLevel.text = "Exp to next level: " + GameControl.control.playerData.getExperienceToNextLevel();
+    }
 
-		if (GameControl.control.playerData.health == 0) 
+    // Update is called once per frame
+    void Update ()
+    {
+        UpdateCameras();
+        UpdateUI();        
+
+		if (GameControl.control.playerData.health <= 0) 
 		{
 			GameOver ();
 		}
@@ -141,49 +159,14 @@ public class Player : MonoBehaviour
 					} else if (hit.transform.tag.Equals ("Enemy")) {
 						// Do damage to enemy
 						int killedEnemy = Attack(hit.transform);
-                        if(killedEnemy > 0)
-                        {
-                            // default gold and exp settings
-                            int gold = GameControl.control.playerData.floor + 1;
-                            int exp = GameControl.control.playerData.floor + 1;
-
-                            switch (killedEnemy)
-                            {
-                                case 0:
-                                    break;
-                                case 1:
-                                    gold += 2;
-                                    exp += 2;
-                                    break;
-                                case 2:
-                                    gold *= 2;
-                                    exp *= 2;
-                                    break;
-                                case 3:
-                                    gold *= 3;
-                                    exp *= 3;
-                                    break;
-                            }
-							GameControl.control.playerData.addGold (gold);
-							GameControl.control.playerData.addExperience (exp);
-                            eventText.text = "Collected " + gold + " coin";
-                            // Debug.Log("coin collected");
-                        }
+                        EnemyInteraction(killedEnemy);
                         // Attacking takes up our turn
                         GameControl.control.takeTurn ();
 						return;// Return to prevent player from moving into enemy's space
 					} else if(hit.transform.tag.Equals("loot")){
-                        // get loot bag
+                        // Get loot bag
                         int bag = hit.transform.GetComponent<Loot>().GetLoot(this.fullHealth);
-                        if(bag < 0) //gained health
-                        {
-                            bag *= -1;
-                            eventText.text = "Gained " + bag + " health!";
-                        }
-                        else
-                        {
-                            eventText.text = "Collected " + bag + " coin!";
-                        }
+                        LootBagInteraction(bag);
                         GameControl.control.takeTurn();
                     }
                     else
@@ -193,7 +176,6 @@ public class Player : MonoBehaviour
                     }
 				}
 			}
-
 			// If we didn't return early, start moving towards destination
 			isMoving = true;
 
@@ -201,6 +183,51 @@ public class Player : MonoBehaviour
 			GameControl.control.takeTurn ();
 		}
 	}
+
+    void EnemyInteraction(int killedEnemy)
+    {
+        if (killedEnemy > 0)
+        {
+            // default gold and exp settings
+            int gold = GameControl.control.playerData.floor + 1;
+            int exp = GameControl.control.playerData.floor + 1;
+
+            switch (killedEnemy)
+            {
+                case 0:
+                    break;
+                case 1:
+                    gold += 2;
+                    exp += 2;
+                    break;
+                case 2:
+                    gold *= 2;
+                    exp *= 2;
+                    break;
+                case 3:
+                    gold *= 3;
+                    exp *= 3;
+                    break;
+            }
+            GameControl.control.playerData.addGold(gold);
+            GameControl.control.playerData.addExperience(exp);
+            eventText.text = "Collected " + gold + " coin";
+            // Debug.Log("coin collected");
+        }
+    }
+
+    void LootBagInteraction(int bag)
+    {        
+        if (bag < 0) // Gained health
+        {
+            bag *= -1;
+            eventText.text = "Gained " + bag + " health!";
+        }
+        else
+        {
+            eventText.text = "Collected " + bag + " coin!";
+        }
+    }
 
 	int Attack (Transform enemy)
     {

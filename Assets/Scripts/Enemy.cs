@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
+    /* Enemy settings */
     private int health;
     private int attackPower;
     private int maxHealth;
@@ -21,21 +22,13 @@ public class Enemy : MonoBehaviour
     {
 		GameControl.control.addToTurnQueue (this.name);
         animator = GetComponent<Animator>();
-        setStats();
-        
-        // set healthbar above enemy, canvas is used for healthbar
-        float offset = 0.5f;
-        enemyCanvas.transform.SetPositionAndRotation(new Vector3(this.transform.position.x, this.transform.position.y + offset, 
-            this.transform.position.z), Quaternion.identity);
-        healthBar.transform.SetPositionAndRotation(new Vector3(this.transform.position.x, this.transform.position.y + offset,
-            this.transform.position.z),Quaternion.identity);
-        
+        SetStats();
+
         // update at least once
         UpdateHealthBar();
-
     }
 
-    void setStats()
+    void SetStats()
     {
         // set health and attack power
         this.health = GameControl.control.playerData.getMaxHealth() / 2;
@@ -63,16 +56,15 @@ public class Enemy : MonoBehaviour
                 //blue slime, nothing changes
                 break;
         }
-
         maxHealth = health;
-
     }
 
     // Update is called once per frame
     void Update ()
 	{
         // Check if it is this object's turn
-		if (GameControl.control.isTurn (this.name)) {
+		if (GameControl.control.isTurn (this.name))
+        {
 			//Debug.Log (this.transform.name + " just passed its turn.");
 			GameControl.control.takeTurnWithoutDelay ();
         }
@@ -81,13 +73,23 @@ public class Enemy : MonoBehaviour
     }
 
     void UpdateHealthBar()
-    {   //reduce health bar by damage percentage
+    {
+        // set healthbar above enemy, canvas is used for healthbar
+        // healthbar will follow the player around
+        float offset = 0.5f;
+        enemyCanvas.transform.SetPositionAndRotation(new Vector3(this.transform.position.x, this.transform.position.y + offset,
+            this.transform.position.z), Quaternion.identity);
+        healthBar.transform.SetPositionAndRotation(new Vector3(this.transform.position.x, this.transform.position.y + offset,
+            this.transform.position.z), Quaternion.identity);
+
+        // Reduce health bar by damage percentage
         float fillAmount = ((float)health / (float)maxHealth);
-        //Debug.Log (fillAmount + " = " + health + " / " + maxHealth);
         healthBar.fillAmount = fillAmount;
+        // Debug.Log (fillAmount + " = " + health + " / " + maxHealth);
     }
 
-    void Attack() {
+    void Attack()
+    {
         // Trigger respective animation
         switch (type)
         {
@@ -113,13 +115,14 @@ public class Enemy : MonoBehaviour
 		GameControl.control.player.GetComponent<Player> ().PlayHitAnimation ();
     }
 
-	public int GetHit(int damage) {
+	public int GetHit(int damage)
+    {
 		health -= damage;
-
         // Enemy died, return status of enemy for other triggers
-        //Attack when its hit
+        // Attack when its hit
         Attack();
-        if (health <= 0) {
+        if (health <= 0)
+        {
 			// Remove enemy from turn queue
 			GameControl.control.removeFromTurnQueue(this.name);
 
