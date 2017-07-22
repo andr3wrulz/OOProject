@@ -21,6 +21,10 @@ For video gamers who want a unique roguelite experience, Dungeon Champion is a d
 
 **>Project Backlog and Burndown Chart (see tabs):** https://docs.google.com/spreadsheets/d/1vZDFVXAAKPuRh6efogXpvQzJuHwpKrMx2JtkUHALCWc/edit?usp=sharing
 
+* Sprint 3 compiled exe : https://drive.google.com/file/d/0B2QXG_bVqMWsYzQ1OEFHZDdMdGM/view?usp=sharing
+
+* Sprint 3 video : https://youtu.be/qRQl2tHHwlo
+
 * Sprint 2 compiled exe : https://drive.google.com/open?id=0B2QXG_bVqMWsOEZJQTNfbDgwR1E
 
 * Sprint 2 video : https://www.youtube.com/watch?v=oKRfqJe22HY
