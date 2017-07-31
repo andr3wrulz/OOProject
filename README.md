@@ -2,7 +2,7 @@
 
 ### Vision Statement 
 
-For video gamers who want a unique roguelike experience, Dungeon Champion is a different take on the traditional rpg tropes that will keep players entertained and coming back for more. Unlike most games that push players to start fresh each time, Dungeon Champion saves most of your progress, so you can keep playing your beloved character.
+For video gamers who want a unique roguelite experience, Dungeon Champion is a different take on the traditional rpg tropes that will keep players entertained and coming back for more. Unlike most games that push players to start fresh each time, Dungeon Champion saves most of your progress, so you can keep playing your beloved character.
 
 ### Design
 
